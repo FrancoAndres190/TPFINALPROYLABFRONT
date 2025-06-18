@@ -1,21 +1,26 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Home } from "../pages/Home";
-import { Login } from "../pages/Login";
-import { NotFound } from "../pages/NotFound";
+import { CreateClasses } from "../pages/CreateClasses";
+import { MyClasses } from "../pages/MyClasses";
+import { Admin } from "../pages/Admin";
+import { CreateUser } from "../pages/CreateUser";
+import Login from "../pages/Login";
+import { Route, Routes } from "react-router-dom";
+import { Classes } from "../pages/Classes";
+
+/*Ingresa a login o cualquier otra ruta y redirige a login/landing
+  si no esta logueado, manda al login */
 
 const MyRoutes = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/about" element={<div>About Page</div>} />
-      <Route path="/contact" element={<div>Contact Page</div>} />
-      <Route path="/services" element={<div>Services Page</div>} />
-      <Route path="/products" element={<div>Products Page</div>} />
-      <Route path="/login" element={<Login />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </BrowserRouter>
+  <Routes>
+    <Route path="/home" element={<Home />} />
+    <Route path="/clases" element={<Classes />} />
+    <Route path="/crearuser" element={<CreateUser />} />
+    <Route path="/crearclases" element={<CreateClasses />} />
+    <Route path="/misclases" element={<MyClasses />} />
+    <Route path="/admin" element={<Admin />} />
+    <Route path="/login" element={<Login />} />
+    <Route path="*" element={<Home />} />
+  </Routes>
 );
 
 export default MyRoutes;
