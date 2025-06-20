@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import NavMenu from "./NavMenu";
 
 const Header = () => {
   const { isLoggedIn, logout } = useAuth();
@@ -31,31 +32,7 @@ const Header = () => {
 
           {/* Navegación */}
           <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li>
-              <Link to="/" className="nav-link px-2">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/features" className="nav-link px-2">
-                Features
-              </Link>
-            </li>
-            <li>
-              <Link to="/pricing" className="nav-link px-2">
-                Pricing
-              </Link>
-            </li>
-            <li>
-              <Link to="/faqs" className="nav-link px-2">
-                FAQs
-              </Link>
-            </li>
-            <li>
-              <Link to="/about" className="nav-link px-2">
-                About
-              </Link>
-            </li>
+            <NavMenu />{" "}
           </ul>
 
           {/* Botones */}
