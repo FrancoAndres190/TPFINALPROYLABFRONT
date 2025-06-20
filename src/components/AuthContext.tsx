@@ -9,6 +9,7 @@ import {
 interface AuthContextType {
   isLoggedIn: boolean;
   token: string | null;
+  roles: string[];
   login: (token: string) => void;
   logout: () => void;
 }
@@ -16,6 +17,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
   token: null,
+  roles: [],
   login: () => {},
   logout: () => {},
 });
@@ -27,8 +29,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(() => isTokenValid());
 
+  const [roles, setRoles] = useState<string[]>([]);
+
   useEffect(() => {
     setIsLoggedIn(isTokenValid());
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      setRoles(payload.roles || []);
+    } else {
+      setRoles([]);
+    }
   }, [token]);
 
   function isTokenValid(): boolean {
@@ -36,8 +49,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const login = (newToken: string) => {
+    //Guardamos el token
     localStorage.setItem("token", newToken);
     setToken(newToken);
+
+    //Guardamos los roles
+    const payload = JSON.parse(atob(newToken.split(".")[1]));
+    setRoles(payload.roles);
   };
 
   const logout = () => {
@@ -46,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, token, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, token, roles, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

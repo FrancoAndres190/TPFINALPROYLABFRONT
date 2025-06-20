@@ -9,7 +9,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const { login, roles } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {
@@ -31,7 +31,8 @@ const Login = () => {
       if (response.ok) {
         login(data.token);
         navigate("/clases");
-        console.log(`token ${data.token}`);
+        //console.log(`token ${data.token}`);
+        console.log(roles);
       }
     } catch (error) {
       console.error("Error en el login:", error);
@@ -42,7 +43,7 @@ const Login = () => {
 
   return (
     <main
-      className="form-signin w-100 m-auto text-center"
+      className="form-signin w-100 m-auto text-center animate__animated animate__fadeInDown"
       style={{ maxWidth: "330px", padding: "1rem" }}>
       <form onSubmit={handleSubmit}>
         <img
