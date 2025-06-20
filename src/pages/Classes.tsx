@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { SERVER_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
+import List from "../components/List";
+import Title from "../components/Title";
 
 //Declaracion para las clases
 type ClassItem = {
@@ -12,7 +14,7 @@ type ClassItem = {
   descrip: string;
 };
 
-export const Classes = () => {
+const Classes = () => {
   //Hook de estados para manejar las clases
   const [classes, setClasses] = useState<ClassItem[]>([]);
   const { token, isLoggedIn } = useAuth();
@@ -53,24 +55,22 @@ export const Classes = () => {
     };
 
     fetchClasses();
-  }, []);
+  }, [isLoggedIn, navigate, token]);
+
+  const handleSelect = (item: ClassItem) => {
+    console.log("Unirme a clase:", item);
+    //Fetch para anotarse
+  };
 
   return (
-    <div className="list-group d-grid gap-2 w-50 mx-auto">
-      {classes.map((item) => (
-        <div
-          key={item.classID}
-          className="list-group-item rounded-2 my-2 py-3 border">
-          <strong>{item.name}</strong> – {item.timec}
-          <span className="d-block small opacity-50">{item.descrip}</span>
-          <span className="badge bg-secondary mt-1">
-            {item.dispo ? "Disponible" : "No disponible"}
-          </span>
-        </div>
-      ))}
+    <div className="container mt-4">
+      <Title>Clases</Title>
+      <List data={classes} add={true} onAdd={handleSelect} />
     </div>
   );
 };
+
+export default Classes;
 
 /* <div className="list-group w-75">
       <div className="list-group-item rounded-2 my-2 py-3">

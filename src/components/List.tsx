@@ -1,43 +1,67 @@
-import { useState } from "react";
+// Declaración para las clases
+type ClassItem = {
+  classID: number;
+  name: string;
+  timec: string;
+  dispo: boolean;
+  descrip: string;
+};
 
-//Declaracion de las props
 interface ListProps {
-  data: string[];
-
-  //Funcion opcional que se ejecuta al seleccionar un elemento de la lista
-  onSelect?: (elemento: string) => void;
+  data: ClassItem[];
+  add?: boolean;
+  quit?: boolean;
+  onAdd?: (item: ClassItem) => void;
+  onQuit?: (item: ClassItem) => void;
 }
 
-//Componente List que recibe un array de strings y muestra una lista
-function List({ data, onSelect }: ListProps) {
-  //Estado para manejar el elemento seleccionado
-  const [index, setIndex] = useState(-1);
-
-  //Funcion para manejar el click en un elemento de la lista
-  const handleClick = (i: number, elemento: string) => {
-    //Se actualiza el estado del elemento seleccionado
-    setIndex(i);
-
-    //Si existe la funcion onSelect, se llama con el elemento seleccionado
-    onSelect?.(elemento);
-
-    //console.log(`Elemento seleccionado: ${data[i]}`);
-  };
-
+function List({ data, add, quit, onAdd, onQuit }: ListProps) {
   return (
-    <ul className="list-group">
-      {/* Se mapea el array de strings y se crea un elemento li por cada uno */}
-      {data.map((elemento, i) => (
-        <li
-          /*Se asigna la funcion handleClick al evento onClick del elemento li */
-          onClick={() => handleClick(i, elemento)}
-          key={elemento}
-          /*Se asigna la clase active si el elemento es el seleccionado*/
-          className={`list-group-item ${index == i ? "active" : ""}`}>
-          {elemento}
-        </li>
+    <div className="list-group d-grid gap-2 w-50 mx-auto">
+      {data.map((item, i) => (
+        <div
+          key={item.classID}
+          className="list-group-item  animate__animated animate__fadeInDown d-flex justify-content-between align-items-center rounded-2 my-2 py-3 border"
+          style={{ animationDelay: `${i * 0.2}s` }}>
+          <div>
+            <strong>{item.name}</strong> – {item.timec}
+            <span className="d-block small opacity-50">{item.descrip}</span>
+            <span
+              className={`badge mt-1 ${
+                item.dispo ? "bg-success" : "bg-secondary"
+              }`}>
+              {item.dispo ? "Disponible" : "No disponible"}
+            </span>
+          </div>
+
+          <div
+            className="ms-3 d-flex flex-column gap-2"
+            style={{ cursor: "pointer" }}>
+            {add && (
+              <button
+                className="btn btn-sm btn-primary"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  onAdd?.(item);
+                }}>
+                Unirme
+              </button>
+            )}
+
+            {quit && (
+              <button
+                className="btn btn-sm btn-danger"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  onQuit?.(item);
+                }}>
+                Quitarme
+              </button>
+            )}
+          </div>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }
 
