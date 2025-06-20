@@ -49,7 +49,7 @@ const Register = () => {
 
   return (
     <main
-      className="form-signin w-100 m-auto text-center"
+      className="form-signin w-100 m-auto text-center animate__animated animate__fadeInDown"
       style={{ maxWidth: "330px", padding: "1rem" }}>
       <form onSubmit={handleSubmit}>
         <img
