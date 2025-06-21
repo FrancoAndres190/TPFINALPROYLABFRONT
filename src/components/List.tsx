@@ -9,20 +9,19 @@ type ClassItem = {
 
 interface ListProps {
   data: ClassItem[];
-  add?: boolean;
-  quit?: boolean;
   actionClassID?: number | null;
   onAdd?: (item: ClassItem) => void;
-  onQuit?: (item: ClassItem) => void;
+  onEdit?: (item: ClassItem) => void;
+  onDelete?: (item: ClassItem) => void;
 }
 
-function List({ data, add, quit, actionClassID, onAdd, onQuit }: ListProps) {
+function List({ data, actionClassID, onAdd, onEdit, onDelete }: ListProps) {
   return (
     <div className="list-group d-grid gap-2 w-50 mx-auto">
       {data.map((item, i) => (
         <div
           key={item.classID}
-          className="list-group-item  animate__animated animate__fadeInDown d-flex justify-content-between align-items-center rounded-2 my-2 py-3 border"
+          className="list-group-item animate__animated animate__fadeInDown d-flex justify-content-between align-items-center rounded-2 my-2 py-3 border"
           style={{ animationDelay: `${i * 0.2}s` }}>
           <div>
             <strong>{item.name}</strong> – {item.timec}
@@ -38,27 +37,29 @@ function List({ data, add, quit, actionClassID, onAdd, onQuit }: ListProps) {
           <div
             className="ms-3 d-flex flex-column gap-2"
             style={{ cursor: "pointer" }}>
-            {add && (
+            {onAdd && (
               <button
                 className="btn btn-sm btn-primary"
-                style={{ cursor: "pointer" }}
                 disabled={actionClassID === item.classID}
-                onClick={() => {
-                  onAdd?.(item);
-                }}>
-                {actionClassID === item.classID ? "Uniendo..." : "Unirme"}
+                onClick={() => onAdd(item)}>
+                {actionClassID === item.classID ? "Agregando..." : "Agregar"}
               </button>
             )}
 
-            {quit && (
+            {onEdit && (
+              <button
+                className="btn btn-sm btn-warning"
+                onClick={() => onEdit(item)}>
+                Editar
+              </button>
+            )}
+
+            {onDelete && (
               <button
                 className="btn btn-sm btn-danger"
-                style={{ cursor: "pointer" }}
                 disabled={actionClassID === item.classID}
-                onClick={() => {
-                  onQuit?.(item);
-                }}>
-                {actionClassID === item.classID ? "Quitando..." : "Quitarme"}
+                onClick={() => onDelete(item)}>
+                {actionClassID === item.classID ? "Borrando..." : "Borrar"}
               </button>
             )}
           </div>
