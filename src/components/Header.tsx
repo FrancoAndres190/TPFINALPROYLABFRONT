@@ -11,7 +11,6 @@ const Header = () => {
     navigate("/login");
   };
 
-  console.log("Header isLoggedIn:", isLoggedIn);
   return (
     <header className="p-3 bg-dark">
       <div className="container">
