@@ -15,89 +15,100 @@ type ClassItem = {
 };
 
 const Classes = () => {
-  //Hook de estados para manejar las clases
   const [classes, setClasses] = useState<ClassItem[]>([]);
   const { token, isLoggedIn } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const [actionClassID, setActionClassID] = useState<number | null>(null);
 
-  //Hook para redireccionar
   const navigate = useNavigate();
-
-  //Hook para pedir las clases al servidor
-  useEffect(() => {
-    //Funcion asincrona para obtener las clases
-    const fetchClasses = async () => {
-      try {
-        if (!isLoggedIn) {
-          navigate("/login");
-          return;
-        }
-
-        //Pedimos las clases al servidor
-        const response = await fetch(`${SERVER_URL}/user/classes`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        //Si falla, vamos al login
-        if (!response.ok) {
-          navigate("/login");
-          return;
-        }
-
-        const data = await response.json();
-        setClasses(data);
-      } catch (err: unknown) {
-        console.error("Error al obtener clases:", err);
+  // Declaramos la función afuera para poder usarla después
+  const fetchClasses = async () => {
+    try {
+      if (!isLoggedIn) {
+        navigate("/login");
+        return;
       }
-    };
 
+      const response = await fetch(`${SERVER_URL}/user/classes`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        navigate("/login");
+        return;
+      }
+
+      const data = await response.json();
+      setClasses(data);
+    } catch (err: unknown) {
+      console.error("Error al obtener clases:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchClasses();
   }, [isLoggedIn, navigate, token]);
 
-  const handleSelect = (item: ClassItem) => {
-    console.log("Unirme a clase:", item);
-    //Fetch para anotarse
+  const handleSelect = async (item: ClassItem) => {
+    try {
+      setActionClassID(item.classID); // <- marcamos qué clase estamos procesando
+
+      const response = await fetch(
+        `${SERVER_URL}/user/users/addclass/${item.classID}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({}),
+        }
+      );
+
+      const result = await response.text();
+
+      if (response.ok) {
+        console.log("Unido correctamente:", result);
+        alert(result);
+
+        // Quitamos la clase de la lista
+        setClasses((prevClasses) =>
+          prevClasses.filter((cls) => cls.classID !== item.classID)
+        );
+      } else {
+        console.error("Error al unirse:", result);
+        alert("Error: " + result);
+      }
+    } catch (error) {
+      console.error("Error en la petición:", error);
+      alert("Error en la conexión");
+    } finally {
+      // Siempre reseteamos el estado
+      setActionClassID(null);
+    }
   };
 
   return (
     <div className="container mt-4">
       <Title>Clases</Title>
-      <List data={classes} add={true} onAdd={handleSelect} />
+      {isLoading ? (
+        <p className="text-center my-4">Cargando...</p>
+      ) : (
+        <List
+          data={classes}
+          add={true}
+          onAdd={handleSelect}
+          actionClassID={actionClassID}
+        />
+      )}
     </div>
   );
 };
 
 export default Classes;
-
-/* <div className="list-group w-75">
-      <div className="list-group-item rounded-2 my-2 py-3">
-        First item
-        <span className="d-block small opacity-50">
-          With support text underneath to add more detail
-        </span>
-      </div>
-
-      <div className="list-group-item rounded-2 my-2 py-3">
-        First item
-        <span className="d-block small opacity-50">
-          With support text underneath to add more detail
-        </span>
-      </div>
-
-      <div className="list-group-item rounded-3 py-3 m-1">
-        Second item
-        <span className="d-block small opacity-50">
-          Some other text goes here
-        </span>
-      </div>
-
-      <div className="list-group-item rounded-3 py-3 text-muted">
-        Third item (disabled)
-        <span className="d-block small opacity-50">
-          This option is disabled
-        </span>
-      </div>
-    </div> */
