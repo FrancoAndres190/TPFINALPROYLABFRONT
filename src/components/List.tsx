@@ -11,11 +11,12 @@ interface ListProps {
   data: ClassItem[];
   add?: boolean;
   quit?: boolean;
+  actionClassID?: number | null;
   onAdd?: (item: ClassItem) => void;
   onQuit?: (item: ClassItem) => void;
 }
 
-function List({ data, add, quit, onAdd, onQuit }: ListProps) {
+function List({ data, add, quit, actionClassID, onAdd, onQuit }: ListProps) {
   return (
     <div className="list-group d-grid gap-2 w-50 mx-auto">
       {data.map((item, i) => (
@@ -41,10 +42,11 @@ function List({ data, add, quit, onAdd, onQuit }: ListProps) {
               <button
                 className="btn btn-sm btn-primary"
                 style={{ cursor: "pointer" }}
+                disabled={actionClassID === item.classID}
                 onClick={() => {
                   onAdd?.(item);
                 }}>
-                Unirme
+                {actionClassID === item.classID ? "Uniendo..." : "Unirme"}
               </button>
             )}
 
@@ -52,10 +54,11 @@ function List({ data, add, quit, onAdd, onQuit }: ListProps) {
               <button
                 className="btn btn-sm btn-danger"
                 style={{ cursor: "pointer" }}
+                disabled={actionClassID === item.classID}
                 onClick={() => {
                   onQuit?.(item);
                 }}>
-                Quitarme
+                {actionClassID === item.classID ? "Quitando..." : "Quitarme"}
               </button>
             )}
           </div>
