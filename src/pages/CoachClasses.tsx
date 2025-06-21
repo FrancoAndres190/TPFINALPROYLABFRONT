@@ -4,15 +4,19 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import List from "../components/List";
 import Title from "../components/Title";
+import CreateClassModal from "../components/CreateClassModal";
 import type { ClassItem } from "../models/ClassItem";
 
-const MyClasses = () => {
+const CoachClasses = () => {
   const [classes, setClasses] = useState<ClassItem[]>([]);
-  const { token, isLoggedIn } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   const [actionClassID, setActionClassID] = useState<number | null>(null);
+
+  const { token, isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
+  // Obtener las clases del coach
   const fetchClasses = async () => {
     try {
       if (!isLoggedIn) {
@@ -20,7 +24,7 @@ const MyClasses = () => {
         return;
       }
 
-      const response = await fetch(`${SERVER_URL}/user/users/myclasses`, {
+      const response = await fetch(`${SERVER_URL}/coach/classes`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -28,10 +32,14 @@ const MyClasses = () => {
         },
       });
 
+      if (!response.ok) {
+        throw new Error("Error al obtener las clases");
+      }
+
       const data = await response.json();
       setClasses(data);
-    } catch (err: unknown) {
-      console.error("Error al obtener clases:", err);
+    } catch (err) {
+      console.error("Error al obtener clases del coach:", err);
     } finally {
       setIsLoading(false);
     }
@@ -41,17 +49,18 @@ const MyClasses = () => {
     fetchClasses();
   }, [isLoggedIn, navigate, token]);
 
-  const handleSelect = async (item: ClassItem) => {
+  // Eliminar clase
+  const handleDelete = async (item: ClassItem) => {
     try {
-      setActionClassID(item.classID); // Marcar la clase en acción
+      setActionClassID(item.classID);
 
       const response = await fetch(
-        `${SERVER_URL}/user/users/myclasses/${item.classID}`,
+        `${SERVER_URL}/coach/classes/${item.classID}`,
         {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -61,17 +70,17 @@ const MyClasses = () => {
       if (response.ok) {
         console.log("Clase eliminada:", result);
 
-        // Eliminamos de la lista (más rápido que recargar)
+        // 🚀 Remover la clase eliminada de la lista actual, sin recargar todo
         setClasses((prevClasses) =>
           prevClasses.filter((cls) => cls.classID !== item.classID)
         );
       } else {
-        console.error("Error al quitarse de la clase:", result);
+        console.error("Error al eliminar clase:", result);
         alert("Error: " + result);
       }
     } catch (err) {
-      console.error("Error en la petición:", err);
-      alert("Error en la conexión al servidor.");
+      console.error("Error al eliminar clase:", err);
+      alert("Error al conectar con el servidor.");
     } finally {
       setActionClassID(null);
     }
@@ -79,23 +88,44 @@ const MyClasses = () => {
 
   return (
     <div className="container mt-4">
-      <Title>Mis clases</Title>
+      <Title>Mis Clases (Coach)</Title>
+
+      <div className="d-flex justify-content-center mb-3">
+        <button
+          className="btn btn-success"
+          onClick={() => setModalVisible(true)}>
+          Crear Nueva Clase
+        </button>
+      </div>
 
       {isLoading ? (
-        <p className="text-center my-4">Cargando...</p>
+        <p className="text-center my-4">Cargando clases...</p>
       ) : classes.length === 0 ? (
         <p className="text-center my-4 animate__animated animate__bounce">
-          No te has anotado a ninguna clase.
+          No has creado ninguna clase.
         </p>
       ) : (
         <List
           data={classes}
-          onDelete={handleSelect}
-          actionClassID={actionClassID} // pasamos el id que se está procesando
+          actionClassID={actionClassID}
+          onDelete={handleDelete}
+        />
+      )}
+
+      {modalVisible && (
+        <CreateClassModal
+          show={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onSave={(newClass?: ClassItem) => {
+            if (newClass) {
+              setClasses((prevClasses) => [newClass, ...prevClasses]);
+            }
+            setModalVisible(false); // cerrar modal
+          }}
         />
       )}
     </div>
   );
 };
 
-export default MyClasses;
+export default CoachClasses;

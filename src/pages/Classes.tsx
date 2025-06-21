@@ -4,15 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import List from "../components/List";
 import Title from "../components/Title";
-
-//Declaracion para las clases
-type ClassItem = {
-  classID: number;
-  name: string;
-  timec: string;
-  dispo: boolean;
-  descrip: string;
-};
+import type { ClassItem } from "../models/ClassItem";
 
 const Classes = () => {
   const [classes, setClasses] = useState<ClassItem[]>([]);
@@ -38,6 +30,7 @@ const Classes = () => {
       });
 
       if (!response.ok) {
+        console.log(response);
         navigate("/login");
         return;
       }
@@ -102,7 +95,6 @@ const Classes = () => {
       ) : (
         <List
           data={classes}
-          add={true}
           onAdd={handleSelect}
           actionClassID={actionClassID}
         />
