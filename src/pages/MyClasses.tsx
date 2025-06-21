@@ -5,7 +5,7 @@ import { useAuth } from "../components/AuthContext";
 import List from "../components/List";
 import Title from "../components/Title";
 
-const classes2: ClassItem[] = [
+/*const classes2: ClassItem[] = [
   {
     classID: 1,
     name: "Spinning",
@@ -35,6 +35,7 @@ const classes2: ClassItem[] = [
     descrip: "Entrenamiento de alta intensidad.",
   },
 ];
+*/
 
 //Declaracion para las clases
 type ClassItem = {
@@ -46,66 +47,93 @@ type ClassItem = {
 };
 
 const MyClasses = () => {
-  //Hook de estados para manejar las clases
   const [classes, setClasses] = useState<ClassItem[]>([]);
   const { token, isLoggedIn } = useAuth();
-
-  //Hook para redireccionar
+  const [isLoading, setIsLoading] = useState(true);
+  const [actionClassID, setActionClassID] = useState<number | null>(null);
   const navigate = useNavigate();
 
-  //Hook para pedir las clases al servidor
-  useEffect(() => {
-    //Funcion asincrona para obtener las clases
-    const fetchClasses = async () => {
-      try {
-        if (!isLoggedIn) {
-          navigate("/login");
-          return;
-        }
-
-        //Pedimos las clases al servidor
-        const response = await fetch(`${SERVER_URL}/user/myclasses`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await response.json();
-
-        setClasses(data);
-      } catch (err: unknown) {
-        console.error("Error al obtener clases:", err);
+  const fetchClasses = async () => {
+    try {
+      if (!isLoggedIn) {
+        navigate("/login");
+        return;
       }
-    };
 
+      const response = await fetch(`${SERVER_URL}/user/users/myclasses`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      setClasses(data);
+    } catch (err: unknown) {
+      console.error("Error al obtener clases:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchClasses();
   }, [isLoggedIn, navigate, token]);
 
-  const handleSelect = (item: ClassItem) => {
-    console.log("Clase seleccionada:", item);
+  const handleSelect = async (item: ClassItem) => {
+    try {
+      setActionClassID(item.classID); // Marcar la clase en acción
 
-    // Ejemplo: podrías hacer fetch, navegar, etc.
-    // navigate(`/user/classes/${item.classID}`);
+      const response = await fetch(
+        `${SERVER_URL}/user/users/myclasses/${item.classID}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const result = await response.text();
+
+      if (response.ok) {
+        console.log("Clase eliminada:", result);
+
+        // Eliminamos de la lista (más rápido que recargar)
+        setClasses((prevClasses) =>
+          prevClasses.filter((cls) => cls.classID !== item.classID)
+        );
+      } else {
+        console.error("Error al quitarse de la clase:", result);
+        alert("Error: " + result);
+      }
+    } catch (err) {
+      console.error("Error en la petición:", err);
+      alert("Error en la conexión al servidor.");
+    } finally {
+      setActionClassID(null);
+    }
   };
 
   return (
     <div className="container mt-4">
       <Title>Mis clases</Title>
 
-      {classes2.length === 0 ? (
-        <p className="text-center my-4">No te has anotado a ninguna clase</p>
-      ) : (
-        <List data={classes2} quit={true} onQuit={handleSelect} />
-      )}
-
-      {classes.length === 0 ? (
+      {isLoading ? (
+        <p className="text-center my-4">Cargando...</p>
+      ) : classes.length === 0 ? (
         <p className="text-center my-4 animate__animated animate__bounce">
-          No te has anotado a ninguna clase
+          No te has anotado a ninguna clase.
         </p>
       ) : (
-        <List data={classes} quit={true} onQuit={handleSelect} />
+        <List
+          data={classes}
+          quit={true}
+          onQuit={handleSelect}
+          actionClassID={actionClassID} // pasamos el id que se está procesando
+        />
       )}
     </div>
   );
