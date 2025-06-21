@@ -7,6 +7,7 @@ import Classes from "../pages/Classes";
 import MyClasses from "../pages/MyClasses";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
+import CoachClasses from "../pages/CoachClasses";
 
 /*Ingresa a login o cualquier otra ruta y redirige a login/landing
   si no esta logueado, manda al login */
@@ -20,6 +21,7 @@ const MyRoutes = () => (
     <Route path="/crearclases" element={<CreateClasses />} />
     <Route path="/misclases" element={<MyClasses />} />
     <Route path="/admin" element={<Admin />} />
+    <Route path="/coach" element={<CoachClasses />} />
     <Route path="/login" element={<Login />} />
     <Route path="*" element={<Home />} />
   </Routes>

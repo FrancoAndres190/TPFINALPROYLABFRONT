@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { SERVER_URL } from "../config";
 import { useAuth } from "../components/AuthContext";
-import EditUserModal from "../components/EditUserModal"; // 🚀 te uso el modal que me pasaste
+import EditUserModal from "../components/EditUserModal";
 
 interface Role {
   id: number;
@@ -218,11 +218,11 @@ export const Admin = () => {
         <p>No hay usuarios que coincidan con el filtro.</p>
       )}
 
-      {/* 🚀 Modal de edición */}
+      {/* Modal para editar usuario*/}
       {selectedUser && (
         <EditUserModal
           user={{
-            userEmail: selectedUser.email, // 🚀 mapeo al campo que usa tu Modal
+            userEmail: selectedUser.email,
             firstName: selectedUser.firstName,
             lastName: selectedUser.lastName,
             tel: selectedUser.tel,
@@ -233,8 +233,8 @@ export const Admin = () => {
           show={modalVisible}
           onClose={() => setModalVisible(false)}
           onSave={() => {
-            fetchUsers(); // 🚀 refresca la lista
-            setModalVisible(false); // 🚀 cierra modal
+            fetchUsers();
+            setModalVisible(false);
           }}
         />
       )}
