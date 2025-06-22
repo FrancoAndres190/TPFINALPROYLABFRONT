@@ -30,7 +30,13 @@ const Login = () => {
 
       if (response.ok) {
         login(data.token);
-        navigate("/clases");
+
+        if (roles.includes("ROLE_COACH")) {
+          navigate("/coach");
+        } else {
+          navigate("/clases");
+        }
+
         //console.log(`token ${data.token}`);
         console.log(roles);
       }

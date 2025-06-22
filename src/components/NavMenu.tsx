@@ -4,17 +4,20 @@ import { NavLink } from "react-router-dom";
 const NavMenu = () => {
   const { roles, isLoggedIn } = useAuth();
 
+  const isUser = roles.includes("ROLE_USER");
+  const isCoach = roles.includes("ROLE_COACH");
+  const isAdmin = roles.includes("ROLE_ADMIN");
+
   return (
     <>
       {/* Botones para todos */}
-
       <li className="nav-item">
-        <NavLink className="nav-link mx-2" to="/">
+        <NavLink className="nav-link text-white" to="/">
           INICIO
         </NavLink>
       </li>
       <li className="nav-item">
-        <NavLink className="nav-link mx-2" to="/contacto">
+        <NavLink className="nav-link text-white" to="/contacto">
           CONTACTO
         </NavLink>
       </li>
@@ -22,44 +25,47 @@ const NavMenu = () => {
       {/* Si está logueado */}
       {isLoggedIn && (
         <>
-          <li className="nav-item">
-            <NavLink className="nav-link mx-2" to="/clases">
+          {/* Menú Clases con subitems */}
+          <li className="nav-item dropdown">
+            <a
+              className="nav-link dropdown-toggle text-white"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
               CLASES
-            </NavLink>
+            </a>
+            <ul className="dropdown-menu">
+              <li>
+                <NavLink className="dropdown-item" to="/clases">
+                  TODAS
+                </NavLink>
+              </li>
+              {(isUser || isAdmin) && (
+                <li>
+                  <NavLink className="dropdown-item" to="/misclases">
+                    MIS CLASES
+                  </NavLink>
+                </li>
+              )}
+              {(isCoach || isAdmin) && (
+                <li>
+                  <NavLink className="dropdown-item" to="/coach">
+                    MIS CLASES CREADAS
+                  </NavLink>
+                </li>
+              )}
+            </ul>
           </li>
-        </>
-      )}
 
-      {/* Si está logueado y es USER */}
-      {isLoggedIn && roles.includes("ROLE_USER") && (
-        <>
-          <li className="nav-item">
-            <NavLink className="nav-link mx-2" to="/misclases">
-              MIS CLASES
-            </NavLink>
-          </li>
-        </>
-      )}
-
-      {/* Si es COACH */}
-      {isLoggedIn && roles.includes("ROLE_COACH") && (
-        <>
-          <li className="nav-item">
-            <NavLink className="nav-link mx-2" to="/coach">
-              MIS CLASES
-            </NavLink>
-          </li>
-        </>
-      )}
-
-      {/* Si es ADMIN */}
-      {isLoggedIn && roles.includes("ROLE_ADMIN") && (
-        <>
-          <li className="nav-item">
-            <NavLink className="nav-link mx-2" to="/admin">
-              PANEL ADMIN
-            </NavLink>
-          </li>
+          {/* Botón Admin */}
+          {isAdmin && (
+            <li className="nav-item">
+              <NavLink className="nav-link text-white" to="/admin">
+                USUARIOS
+              </NavLink>
+            </li>
+          )}
         </>
       )}
     </>

@@ -12,30 +12,40 @@ const Header = () => {
   };
 
   return (
-    <header className="p-3 bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
-        <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-          {/* Logo */}
-          <Link
-            to="/"
-            className="d-flex align-items-center mb-2 mb-md-0 text-decoration-none">
-            <img
-              className="bi me-2"
-              src="https://cdn.worldvectorlogo.com/logos/jira-3.svg"
-              alt="Logo GYM"
-              width="40"
-              height="40"
-            />
-            <h1 className="h3 bi me-2">GYM APP</h1>
-          </Link>
+        {/* Logo */}
+        <Link to="/" className="navbar-brand d-flex align-items-center">
+          <img
+            src="https://cdn.worldvectorlogo.com/logos/jira-3.svg"
+            alt="Logo GYM"
+            width="40"
+            height="40"
+            className="me-2"
+          />
+          <h1 className="h4 m-0">GYM APP</h1>
+        </Link>
 
-          {/* Navegación */}
-          <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <NavMenu />{" "}
+        {/* Botón hamburguesa para móvil */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        {/* Contenido del navbar */}
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
+            <NavMenu />
           </ul>
 
           {/* Botones */}
-          <div className="text-end">
+          <div className="d-flex">
             {isLoggedIn ? (
               <button className="btn btn-outline-light" onClick={handleLogout}>
                 Cerrar sesión
@@ -53,7 +63,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-    </header>
+    </nav>
   );
 };
 
