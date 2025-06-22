@@ -7,19 +7,38 @@ import type { ClassItem } from "../../models/ClassItem";
 interface CreateClassModalProps {
   show: boolean;
   onClose: () => void;
-  onSave?: (newClass: ClassItem) => void; // 🚀 le paso la clase creada
+  onSave?: (newClass: ClassItem) => void;
 }
 
 const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
   const { token } = useAuth();
 
   const [name, setName] = useState("");
-  const [timec, setTimec] = useState("");
+  const [timec, setTimec] = useState("7:00");
   const [descrip, setDescrip] = useState("");
   const [dispo, setDispo] = useState(true);
+  const [maxCapacity, setMaxCapacity] = useState(10);
+  const [durationMinutes, setDurationMinutes] = useState(60);
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  // Opciones de horarios (7:00 a 23:00)
+  const horas = [];
+  for (let h = 7; h <= 23; h++) {
+    horas.push(`${h}:00`);
+  }
+
+  const duraciones = [];
+  for (let i = 1; i <= 4; i++) {
+    duraciones.push(i);
+  }
+
+  // Capacidad (1 a 15)
+  const cupos = [];
+  for (let i = 1; i <= 15; i++) {
+    cupos.push(i);
+  }
 
   const handleSave = async () => {
     setLoading(true);
@@ -37,16 +56,15 @@ const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
           timec,
           descrip,
           dispo,
+          maxCapacity,
+          durationMinutes,
         }),
       });
 
-      // Esperamos la respuesta como JSON (ideal que backend la devuelva así)
       const result = await response.json();
 
       if (response.ok) {
         setMessage("Clase creada con éxito.");
-
-        // 🚀 Le pasamos al padre la nueva clase creada
         onSave?.(result as ClassItem);
 
         setTimeout(() => {
@@ -100,16 +118,55 @@ const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
 
         {/* Horario */}
         <div className="form-floating mb-3">
-          <input
-            type="text"
-            className="form-control bg-dark text-white"
-            id="createClassTimeInput"
-            placeholder="Horario"
+          <select
+            className="form-select bg-dark text-white"
+            id="createClassTimeSelect"
             value={timec}
-            onChange={(e) => setTimec(e.target.value)}
-          />
-          <label htmlFor="createClassTimeInput" className="text-secondary">
+            onChange={(e) => setTimec(e.target.value)}>
+            {horas.map((h, idx) => (
+              <option key={idx} value={h}>
+                {h}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="createClassTimeSelect" className="text-secondary">
             Horario
+          </label>
+        </div>
+
+        {/* Duración */}
+        <div className="form-floating mb-3">
+          <select
+            className="form-select bg-dark text-white"
+            id="createClassDurationSelect"
+            value={durationMinutes}
+            onChange={(e) => setDurationMinutes(parseInt(e.target.value))}>
+            {duraciones.map((d) => (
+              <option key={d} value={d}>
+                {d} HS
+              </option>
+            ))}
+          </select>
+          <label htmlFor="createClassDurationSelect" className="text-secondary">
+            Duración
+          </label>
+        </div>
+
+        {/* Cupo máximo */}
+        <div className="form-floating mb-3">
+          <select
+            className="form-select bg-dark text-white"
+            id="createClassCupoSelect"
+            value={maxCapacity}
+            onChange={(e) => setMaxCapacity(parseInt(e.target.value))}>
+            {cupos.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="createClassCupoSelect" className="text-secondary">
+            Cupo máximo (personas)
           </label>
         </div>
 
@@ -124,7 +181,7 @@ const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
             onChange={(e) => setDescrip(e.target.value)}
           />
           <label htmlFor="createClassDescripInput" className="text-secondary">
-            Descripción
+            Descripcion
           </label>
         </div>
 
@@ -158,19 +215,3 @@ const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
 };
 
 export default CreateClassModal;
-
-/* Descripción 
-        <div className="form-floating mb-3">
-          <textarea
-            className="form-control bg-dark text-white"
-            id="createClassDescripInput"
-            placeholder="Descripción"
-            value={descrip}
-            onChange={(e) => setDescrip(e.target.value)}
-            style={{ height: "100px" }}></textarea>
-          <label
-            htmlFor="createClassDescripInput"
-            className="text-secondary bg-dark">
-            Descripción
-          </label>
-        </div> */
