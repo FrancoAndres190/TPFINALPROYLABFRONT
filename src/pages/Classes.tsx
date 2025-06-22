@@ -12,8 +12,10 @@ const Classes = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [actionClassID, setActionClassID] = useState<number | null>(null);
 
+  const [filterText, setFilterText] = useState(""); // NUEVO: filtro
+
   const navigate = useNavigate();
-  // Declaramos la función afuera para poder usarla después
+
   const fetchClasses = async () => {
     try {
       if (!isLoggedIn) {
@@ -36,6 +38,7 @@ const Classes = () => {
       }
 
       const data = await response.json();
+      console.log(data);
       setClasses(data);
     } catch (err: unknown) {
       console.error("Error al obtener clases:", err);
@@ -50,7 +53,7 @@ const Classes = () => {
 
   const handleSelect = async (item: ClassItem) => {
     try {
-      setActionClassID(item.classID); // <- marcamos qué clase estamos procesando
+      setActionClassID(item.classID);
 
       const response = await fetch(
         `${SERVER_URL}/user/users/addclass/${item.classID}`,
@@ -70,7 +73,6 @@ const Classes = () => {
         console.log("Unido correctamente:", result);
         alert(result);
 
-        // Quitamos la clase de la lista
         setClasses((prevClasses) =>
           prevClasses.filter((cls) => cls.classID !== item.classID)
         );
@@ -82,22 +84,39 @@ const Classes = () => {
       console.error("Error en la petición:", error);
       alert("Error en la conexión");
     } finally {
-      // Siempre reseteamos el estado
       setActionClassID(null);
     }
   };
 
+  // Aplicamos el filtro (insensible a mayúsculas/minúsculas)
+  const filteredClasses = classes.filter((cls) =>
+    cls.name.toLowerCase().includes(filterText.toLowerCase())
+  );
+
   return (
     <div className="container mt-4">
       <Title>Clases</Title>
+
       {isLoading ? (
         <p className="text-center my-4">Cargando...</p>
       ) : (
-        <List
-          data={classes}
-          onAdd={handleSelect}
-          actionClassID={actionClassID}
-        />
+        <>
+          {/* INPUT PARA FILTRO */}
+          <div className="mb-3 text-center">
+            <input
+              type="text"
+              className="form-control w-50 mx-auto"
+              placeholder="Buscar clase..."
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+            />
+          </div>
+          <List
+            data={filteredClasses}
+            onAdd={handleSelect}
+            actionClassID={actionClassID}
+          />
+        </>
       )}
     </div>
   );

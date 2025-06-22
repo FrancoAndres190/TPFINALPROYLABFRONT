@@ -11,6 +11,8 @@ const MyClasses = () => {
   const { token, isLoggedIn } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [actionClassID, setActionClassID] = useState<number | null>(null);
+  const [filterText, setFilterText] = useState(""); // FILTRO
+
   const navigate = useNavigate();
 
   const fetchClasses = async () => {
@@ -43,7 +45,7 @@ const MyClasses = () => {
 
   const handleSelect = async (item: ClassItem) => {
     try {
-      setActionClassID(item.classID); // Marcar la clase en acción
+      setActionClassID(item.classID);
 
       const response = await fetch(
         `${SERVER_URL}/user/users/myclasses/${item.classID}`,
@@ -61,7 +63,6 @@ const MyClasses = () => {
       if (response.ok) {
         console.log("Clase eliminada:", result);
 
-        // Eliminamos de la lista (más rápido que recargar)
         setClasses((prevClasses) =>
           prevClasses.filter((cls) => cls.classID !== item.classID)
         );
@@ -77,6 +78,11 @@ const MyClasses = () => {
     }
   };
 
+  // Filtro por nombre
+  const filteredClasses = classes.filter((cls) =>
+    cls.name.toLowerCase().includes(filterText.toLowerCase())
+  );
+
   return (
     <div className="container mt-4">
       <Title>Mis clases</Title>
@@ -88,11 +94,25 @@ const MyClasses = () => {
           No te has anotado a ninguna clase.
         </p>
       ) : (
-        <List
-          data={classes}
-          onDelete={handleSelect}
-          actionClassID={actionClassID} // pasamos el id que se está procesando
-        />
+        <>
+          {/* INPUT PARA FILTRAR */}
+          <div className="mb-3 text-center">
+            <input
+              type="text"
+              className="form-control w-50 mx-auto"
+              placeholder="Buscar clase..."
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+            />
+          </div>
+
+          <List
+            key={filterText} // para re-animar
+            data={filteredClasses}
+            onDelete={handleSelect}
+            actionClassID={actionClassID}
+          />
+        </>
       )}
     </div>
   );

@@ -1,13 +1,5 @@
+import type { ClassItem } from "../models/ClassItem";
 import { useAuth } from "./AuthContext";
-
-// Declaración para las clases
-type ClassItem = {
-  classID: number;
-  name: string;
-  timec: string;
-  dispo: boolean;
-  descrip: string;
-};
 
 interface ListProps {
   data: ClassItem[];
@@ -27,7 +19,7 @@ function List({
   onClick,
 }: ListProps) {
   const { roles } = useAuth();
-  const isUser = roles.includes("USER");
+  const isUser = roles.includes("ROLE_USER");
 
   return (
     <div
@@ -44,6 +36,20 @@ function List({
           <div>
             <strong>{item.name}</strong> – {item.timec}
             <span className="d-block small opacity-50">{item.descrip}</span>
+            {item.maxCapacity !== null && (
+              <div className="d-block small">Capacidad: {item.maxCapacity}</div>
+            )}
+            {item.durationMinutes !== null && (
+              <div className="d-block small">
+                Duración: {item.durationMinutes} min
+              </div>
+            )}
+            <div className="d-block small">Coach: {item.coachName}</div>
+            {item.createdAt && (
+              <div className="d-block small opacity-50">
+                Creada: {new Date(item.createdAt).toLocaleString()}
+              </div>
+            )}
             <span
               className={`badge mt-1 ${
                 item.dispo ? "bg-success" : "bg-secondary"
