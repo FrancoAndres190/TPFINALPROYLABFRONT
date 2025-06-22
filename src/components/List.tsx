@@ -13,14 +13,27 @@ interface ListProps {
   onAdd?: (item: ClassItem) => void;
   onEdit?: (item: ClassItem) => void;
   onDelete?: (item: ClassItem) => void;
+  onClick?: (item: ClassItem) => void;
 }
 
-function List({ data, actionClassID, onAdd, onEdit, onDelete }: ListProps) {
+function List({
+  data,
+  actionClassID,
+  onAdd,
+  onEdit,
+  onDelete,
+  onClick,
+}: ListProps) {
   return (
-    <div className="list-group d-grid gap-2 w-50 mx-auto">
+    <div
+      style={{
+        cursor: onClick ? "pointer" : "default",
+      }}
+      className="list-group d-grid gap-2 w-50 mx-auto">
       {data.map((item, i) => (
         <div
           key={item.classID}
+          onClick={() => onClick?.(item)}
           className="list-group-item animate__animated animate__fadeInDown d-flex justify-content-between align-items-center rounded-2 my-2 py-3 border"
           style={{ animationDelay: `${i * 0.2}s` }}>
           <div>
@@ -34,14 +47,15 @@ function List({ data, actionClassID, onAdd, onEdit, onDelete }: ListProps) {
             </span>
           </div>
 
-          <div
-            className="ms-3 d-flex flex-column gap-2"
-            style={{ cursor: "pointer" }}>
+          <div className="ms-3 d-flex flex-column gap-2">
             {onAdd && (
               <button
                 className="btn btn-sm btn-primary"
                 disabled={actionClassID === item.classID}
-                onClick={() => onAdd(item)}>
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAdd(item);
+                }}>
                 {actionClassID === item.classID ? "Agregando..." : "Agregar"}
               </button>
             )}
@@ -49,7 +63,10 @@ function List({ data, actionClassID, onAdd, onEdit, onDelete }: ListProps) {
             {onEdit && (
               <button
                 className="btn btn-sm btn-warning"
-                onClick={() => onEdit(item)}>
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(item);
+                }}>
                 Editar
               </button>
             )}
@@ -58,7 +75,10 @@ function List({ data, actionClassID, onAdd, onEdit, onDelete }: ListProps) {
               <button
                 className="btn btn-sm btn-danger"
                 disabled={actionClassID === item.classID}
-                onClick={() => onDelete(item)}>
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(item);
+                }}>
                 {actionClassID === item.classID ? "Borrando..." : "Borrar"}
               </button>
             )}

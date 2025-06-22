@@ -5,13 +5,19 @@ import { useAuth } from "../components/AuthContext";
 import List from "../components/List";
 import Title from "../components/Title";
 import CreateClassModal from "../components/CreateClassModal";
+import ViewClassModal from "../components/ViewClassModal"; // ⬅️ tu modal de ver clase
 import type { ClassItem } from "../models/ClassItem";
+import type { UserItem } from "../models/UserItem";
 
 const CoachClasses = () => {
   const [classes, setClasses] = useState<ClassItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [actionClassID, setActionClassID] = useState<number | null>(null);
+
+  const [selectedClass, setSelectedClass] = useState<ClassItem | null>(null);
+  const [usersInClass, setUsersInClass] = useState<UserItem[]>([]);
+  const [viewModalVisible, setViewModalVisible] = useState(false);
 
   const { token, isLoggedIn } = useAuth();
   const navigate = useNavigate();
@@ -49,6 +55,70 @@ const CoachClasses = () => {
     fetchClasses();
   }, [isLoggedIn, navigate, token]);
 
+  // Cuando clickeamos en una tarjeta
+  const handleClick = async (item: ClassItem) => {
+    try {
+      // 🚀 solo pedimos la lista de usuarios
+      const response = await fetch(
+        `${SERVER_URL}/coach/classes/userlist/${item.classID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al obtener usuarios de la clase");
+      }
+
+      const users: UserItem[] = await response.json();
+
+      console.log(users);
+      setSelectedClass(item); // info de la clase → ya la tenemos
+      setUsersInClass(users); // usuarios que nos trajo
+      setViewModalVisible(true); // mostrar modal
+    } catch (err) {
+      console.error("Error al obtener usuarios de la clase:", err);
+      alert("Error al obtener usuarios de la clase.");
+    }
+  };
+
+  const onDeleteUser = async (user: UserItem) => {
+    if (!selectedClass) return;
+
+    try {
+      const response = await fetch(
+        `${SERVER_URL}/coach/classes/userlist/${selectedClass.classID}/user/${user.userID}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.text();
+
+      if (response.ok) {
+        alert(result);
+
+        setUsersInClass((prevUsers) =>
+          prevUsers.filter((u) => u.userID !== user.userID)
+        );
+      } else {
+        console.error("Error al eliminar usuario:", result);
+        alert("Error: " + result);
+      }
+    } catch (err) {
+      console.error("Error al eliminar usuario:", err);
+      alert("Error al conectar con el servidor.");
+    }
+  };
+
   // Eliminar clase
   const handleDelete = async (item: ClassItem) => {
     try {
@@ -68,9 +138,8 @@ const CoachClasses = () => {
       const result = await response.text();
 
       if (response.ok) {
-        console.log("Clase eliminada:", result);
+        alert("Clase eliminada.");
 
-        // 🚀 Remover la clase eliminada de la lista actual, sin recargar todo
         setClasses((prevClasses) =>
           prevClasses.filter((cls) => cls.classID !== item.classID)
         );
@@ -109,6 +178,7 @@ const CoachClasses = () => {
           data={classes}
           actionClassID={actionClassID}
           onDelete={handleDelete}
+          onClick={handleClick}
         />
       )}
 
@@ -122,6 +192,17 @@ const CoachClasses = () => {
             }
             setModalVisible(false); // cerrar modal
           }}
+        />
+      )}
+
+      {viewModalVisible && selectedClass && (
+        <ViewClassModal
+          show={viewModalVisible}
+          onClose={() => setViewModalVisible(false)}
+          classInfo={selectedClass}
+          usersInClass={usersInClass}
+          onUserDelete={onDeleteUser}
+          actionUserID={null}
         />
       )}
     </div>
