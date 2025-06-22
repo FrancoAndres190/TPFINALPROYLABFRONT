@@ -12,11 +12,11 @@ const ListUser = ({ data, onClick, onDelete, actionUserID }: ListUserProps) => {
   const [confirmDeleteID, setConfirmDeleteID] = useState<number | null>(null);
 
   return (
-    <div className="list-group d-grid gap-2 w-75 mx-auto">
+    <div className="list-group d-grid gap-2 w-75 mx-auto bg-dark text-white">
       {data.map((user, i) => (
         <div
           key={user.userID}
-          className="list-group-item animate__animated animate__fadeInDown d-flex justify-content-between align-items-center rounded-2 my-2 py-3 border"
+          className="list-group-item animate__animated animate__fadeInDown d-flex justify-content-between align-items-center rounded-2 my-2 py-3 border bg-dark text-white"
           style={{
             animationDelay: `${i * 0.1}s`,
             cursor: onClick ? "pointer" : "default",
