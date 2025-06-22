@@ -35,12 +35,44 @@ const ViewClassModal = ({
       </Modal.Header>
 
       <Modal.Body>
-        <div className="mb-3">
+        {/* Horario */}
+        <div className="mb-2">
           <strong>Horario:</strong> {classInfo.timec}
         </div>
+
+        {/* Duración */}
+        {classInfo.durationMinutes !== null && (
+          <div className="mb-2">
+            <strong>Duración:</strong> {classInfo.durationMinutes} min
+          </div>
+        )}
+
+        {/* Cupo máximo */}
+        {classInfo.maxCapacity !== null && (
+          <div className="mb-2">
+            <strong>Cupo máximo:</strong> {classInfo.maxCapacity} personas
+          </div>
+        )}
+
+        {/* Coach */}
+        <div className="mb-2">
+          <strong>Coach:</strong> {classInfo.coachName}
+        </div>
+
+        {/* Fecha de creación */}
+        {classInfo.createdAt && (
+          <div className="mb-2">
+            <strong>Creada:</strong>{" "}
+            {new Date(classInfo.createdAt).toLocaleString()}
+          </div>
+        )}
+
+        {/* Descripción */}
         <div className="mb-3">
           <strong>Descripción:</strong> {classInfo.descrip}
         </div>
+
+        {/* Estado */}
         <div className="mb-3">
           <span
             className={`badge ${

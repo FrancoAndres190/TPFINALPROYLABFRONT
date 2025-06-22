@@ -29,10 +29,14 @@ const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
     horas.push(`${h}:00`);
   }
 
-  const duraciones = [];
-  for (let i = 1; i <= 4; i++) {
-    duraciones.push(i);
-  }
+  const duraciones = [
+    { label: "30 minutos", value: 30 },
+    { label: "1 hora", value: 60 },
+    { label: "1 hora 30 minutos", value: 90 },
+    { label: "2 horas", value: 120 },
+    { label: "2 horas 30 minutos", value: 150 },
+    { label: "3 horas", value: 180 },
+  ];
 
   // Capacidad (1 a 15)
   const cupos = [];
@@ -125,7 +129,7 @@ const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
             onChange={(e) => setTimec(e.target.value)}>
             {horas.map((h, idx) => (
               <option key={idx} value={h}>
-                {h}
+                {h} hs
               </option>
             ))}
           </select>
@@ -142,8 +146,8 @@ const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
             value={durationMinutes}
             onChange={(e) => setDurationMinutes(parseInt(e.target.value))}>
             {duraciones.map((d) => (
-              <option key={d} value={d}>
-                {d} HS
+              <option key={d.value} value={d.value}>
+                {d.label}
               </option>
             ))}
           </select>
