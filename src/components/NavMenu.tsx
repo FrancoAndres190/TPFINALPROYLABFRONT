@@ -27,6 +27,12 @@ const NavMenu = () => {
               CLASES
             </NavLink>
           </li>
+        </>
+      )}
+
+      {/* Si está logueado y es USER */}
+      {isLoggedIn && roles.includes("ROLE_USER") && (
+        <>
           <li className="nav-item">
             <NavLink className="nav-link mx-2" to="/misclases">
               MIS CLASES
@@ -40,7 +46,7 @@ const NavMenu = () => {
         <>
           <li className="nav-item">
             <NavLink className="nav-link mx-2" to="/coach">
-              PANEL PROFESOR
+              MIS CLASES
             </NavLink>
           </li>
         </>
