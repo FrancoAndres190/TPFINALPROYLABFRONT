@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Modal, Button, Alert } from "react-bootstrap";
-import { SERVER_URL } from "../config";
-import { useAuth } from "../components/AuthContext";
-import type { ClassItem } from "../models/ClassItem";
+import { SERVER_URL } from "../../config";
+import { useAuth } from "../../components/AuthContext";
+import type { ClassItem } from "../../models/ClassItem";
 
 interface CreateClassModalProps {
   show: boolean;
@@ -115,13 +115,14 @@ const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
 
         {/* Descripción */}
         <div className="form-floating mb-3">
-          <textarea
+          <input
+            type="text"
             className="form-control bg-dark text-white"
             id="createClassDescripInput"
             placeholder="Descripción"
             value={descrip}
             onChange={(e) => setDescrip(e.target.value)}
-            style={{ height: "100px" }}></textarea>
+          />
           <label htmlFor="createClassDescripInput" className="text-secondary">
             Descripción
           </label>
@@ -157,3 +158,19 @@ const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
 };
 
 export default CreateClassModal;
+
+/* Descripción 
+        <div className="form-floating mb-3">
+          <textarea
+            className="form-control bg-dark text-white"
+            id="createClassDescripInput"
+            placeholder="Descripción"
+            value={descrip}
+            onChange={(e) => setDescrip(e.target.value)}
+            style={{ height: "100px" }}></textarea>
+          <label
+            htmlFor="createClassDescripInput"
+            className="text-secondary bg-dark">
+            Descripción
+          </label>
+        </div> */

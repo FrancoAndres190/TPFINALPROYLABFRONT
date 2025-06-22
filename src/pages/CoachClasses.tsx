@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import List from "../components/List";
 import Title from "../components/Title";
-import CreateClassModal from "../components/CreateClassModal";
-import ViewClassModal from "../components/ViewClassModal"; // ⬅️ tu modal de ver clase
+import CreateClassModal from "../components/modals/CreateClassModal";
+import ViewClassModal from "../components/modals/ViewClassModal"; // ⬅️ tu modal de ver clase
 import type { ClassItem } from "../models/ClassItem";
 import type { UserItem } from "../models/UserItem";
 

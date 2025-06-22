@@ -1,7 +1,7 @@
 import { Modal, Button } from "react-bootstrap";
-import ListUser from "./ListUser";
-import type { ClassItem } from "../models/ClassItem";
-import type { UserItem } from "../models/UserItem";
+import ListUser from "../ListUser";
+import type { ClassItem } from "../../models/ClassItem";
+import type { UserItem } from "../../models/UserItem";
 
 interface ViewClassModalProps {
   show: boolean;
@@ -52,12 +52,18 @@ const ViewClassModal = ({
 
         <hr />
 
-        <h5>Usuarios en esta clase:</h5>
-        <ListUser
-          data={usersInClass}
-          onDelete={onUserDelete}
-          actionUserID={actionUserID}
-        />
+        <h5>Usuarios:</h5>
+        {usersInClass.length === 0 ? (
+          <p className="text-center my-4 animate__animated animate__bounce">
+            No hay usuarios anotados en esta clase.
+          </p>
+        ) : (
+          <ListUser
+            data={usersInClass}
+            onDelete={onUserDelete}
+            actionUserID={actionUserID}
+          />
+        )}
       </Modal.Body>
 
       <Modal.Footer>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { SERVER_URL } from "../config";
 import { useAuth } from "../components/AuthContext";
-import EditUserModal from "../components/EditUserModal";
+import EditUserModal from "../components/modals/EditUserModal";
 
 interface Role {
   id: number;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { SERVER_URL } from "../config";
-import { useAuth } from "../components/AuthContext";
+import { SERVER_URL } from "../../config";
+import { useAuth } from "../AuthContext";
 import { Modal, Button, Alert, Form } from "react-bootstrap";
 
 type Role = {
