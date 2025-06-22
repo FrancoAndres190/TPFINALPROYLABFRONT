@@ -1,3 +1,5 @@
+import { useAuth } from "./AuthContext";
+
 // Declaración para las clases
 type ClassItem = {
   classID: number;
@@ -24,6 +26,9 @@ function List({
   onDelete,
   onClick,
 }: ListProps) {
+  const { roles } = useAuth();
+  const isUser = roles.includes("USER");
+
   return (
     <div
       style={{
@@ -48,7 +53,7 @@ function List({
           </div>
 
           <div className="ms-3 d-flex flex-column gap-2">
-            {onAdd && (
+            {onAdd && isUser && (
               <button
                 className="btn btn-sm btn-primary"
                 disabled={actionClassID === item.classID}
