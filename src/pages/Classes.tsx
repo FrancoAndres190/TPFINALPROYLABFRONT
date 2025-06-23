@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import List from "../components/List";
 import Title from "../components/Title";
+import ViewClassModal from "../components/modals/ViewClassModal";
 import type { ClassItem } from "../models/ClassItem";
 
 const Classes = () => {
@@ -11,8 +12,10 @@ const Classes = () => {
   const { token, isLoggedIn } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [actionClassID, setActionClassID] = useState<number | null>(null);
+  const [filterText, setFilterText] = useState("");
 
-  const [filterText, setFilterText] = useState(""); // NUEVO: filtro
+  const [selectedClass, setSelectedClass] = useState<ClassItem | null>(null);
+  const [viewModalVisible, setViewModalVisible] = useState(false);
 
   const navigate = useNavigate();
 
@@ -88,7 +91,11 @@ const Classes = () => {
     }
   };
 
-  // Aplicamos el filtro (insensible a mayúsculas/minúsculas)
+  const handleClick = (item: ClassItem) => {
+    setSelectedClass(item);
+    setViewModalVisible(true);
+  };
+
   const filteredClasses = classes.filter((cls) =>
     cls.name.toLowerCase().includes(filterText.toLowerCase())
   );
@@ -101,7 +108,6 @@ const Classes = () => {
         <p className="text-center my-4">Cargando...</p>
       ) : (
         <>
-          {/* INPUT PARA FILTRO */}
           <div className="mb-3 text-center">
             <input
               type="text"
@@ -114,9 +120,18 @@ const Classes = () => {
           <List
             data={filteredClasses}
             onAdd={handleSelect}
+            onClick={handleClick}
             actionClassID={actionClassID}
           />
         </>
+      )}
+
+      {viewModalVisible && selectedClass && (
+        <ViewClassModal
+          show={viewModalVisible}
+          onClose={() => setViewModalVisible(false)}
+          classInfo={selectedClass}
+        />
       )}
     </div>
   );

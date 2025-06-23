@@ -43,6 +43,7 @@ const CoachClasses = () => {
       }
 
       const data = await response.json();
+
       setClasses(data);
     } catch (err) {
       console.error("Error al obtener clases del coach:", err);
@@ -58,7 +59,7 @@ const CoachClasses = () => {
   // Cuando clickeamos en una tarjeta
   const handleClick = async (item: ClassItem) => {
     try {
-      // 🚀 solo pedimos la lista de usuarios
+      // solo pedimos la lista de usuarios
       const response = await fetch(
         `${SERVER_URL}/coach/classes/userlist/${item.classID}`,
         {
@@ -76,7 +77,6 @@ const CoachClasses = () => {
 
       const users: UserItem[] = await response.json();
 
-      console.log(users);
       setSelectedClass(item); // info de la clase → ya la tenemos
       setUsersInClass(users); // usuarios que nos trajo
       setViewModalVisible(true); // mostrar modal
@@ -157,7 +157,7 @@ const CoachClasses = () => {
 
   return (
     <div className="container mt-4">
-      <Title>Mis Clases (Coach)</Title>
+      <Title>Mis Clases Creadas</Title>
 
       <div className="d-flex justify-content-center mb-3">
         <button

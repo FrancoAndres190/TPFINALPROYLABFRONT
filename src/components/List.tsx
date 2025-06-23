@@ -34,28 +34,22 @@ function List({
           className="list-group-item animate__animated animate__fadeInDown d-flex justify-content-between align-items-center rounded-2 my-2 py-3 border"
           style={{ animationDelay: `${i * 0.2}s` }}>
           <div>
-            <strong>{item.name}</strong> – {item.timec}
-            <span className="d-block small opacity-50">{item.descrip}</span>
+            <span className="me-2">
+              <strong>{item.name}</strong> – {item.timec}
+            </span>
+            <span
+              className={`badge ${item.dispo ? "bg-success" : "bg-secondary"}`}>
+              {item.dispo ? "Disponible" : "No disponible"}
+            </span>
+            <div className="d-block small">Profesor: {item.coachName}</div>
             {item.maxCapacity !== null && (
-              <div className="d-block small">Capacidad: {item.maxCapacity}</div>
+              <div className="d-block small">Cupos: {item.maxCapacity}</div>
             )}
             {item.durationMinutes !== null && (
               <div className="d-block small">
-                Duración: {item.durationMinutes} min
+                Duración: {item.durationMinutes} minutos
               </div>
             )}
-            <div className="d-block small">Coach: {item.coachName}</div>
-            {item.createdAt && (
-              <div className="d-block small opacity-50">
-                Creada: {new Date(item.createdAt).toLocaleString()}
-              </div>
-            )}
-            <span
-              className={`badge mt-1 ${
-                item.dispo ? "bg-success" : "bg-secondary"
-              }`}>
-              {item.dispo ? "Disponible" : "No disponible"}
-            </span>
           </div>
 
           <div className="ms-3 d-flex flex-column gap-2">

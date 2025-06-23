@@ -5,6 +5,7 @@ import { useAuth } from "../components/AuthContext";
 import List from "../components/List";
 import Title from "../components/Title";
 import type { ClassItem } from "../models/ClassItem";
+import ViewClassModal from "../components/modals/ViewClassModal";
 
 const MyClasses = () => {
   const [classes, setClasses] = useState<ClassItem[]>([]);
@@ -12,6 +13,9 @@ const MyClasses = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [actionClassID, setActionClassID] = useState<number | null>(null);
   const [filterText, setFilterText] = useState(""); // FILTRO
+
+  const [selectedClass, setSelectedClass] = useState<ClassItem | null>(null);
+  const [viewModalVisible, setViewModalVisible] = useState(false);
 
   const navigate = useNavigate();
 
@@ -42,6 +46,11 @@ const MyClasses = () => {
   useEffect(() => {
     fetchClasses();
   }, [isLoggedIn, navigate, token]);
+
+  const handleClick = (item: ClassItem) => {
+    setSelectedClass(item);
+    setViewModalVisible(true);
+  };
 
   const handleSelect = async (item: ClassItem) => {
     try {
@@ -110,7 +119,14 @@ const MyClasses = () => {
             key={filterText} // para re-animar
             data={filteredClasses}
             onDelete={handleSelect}
+            onClick={handleClick}
             actionClassID={actionClassID}
+          />
+
+          <ViewClassModal
+            show={viewModalVisible}
+            onClose={() => setViewModalVisible(false)}
+            classInfo={selectedClass}
           />
         </>
       )}
