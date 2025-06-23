@@ -4,8 +4,8 @@ import Title from "../components/Title";
 const Home = () => {
   const navigate = useNavigate();
 
-  const handleVerClases = () => {
-    navigate("/clases");
+  const handleRegister = () => {
+    navigate("/registrar");
   };
 
   return (
@@ -21,25 +21,25 @@ const Home = () => {
           />
         </div>
 
-        <div className="col-md-6">
+        <div className="col-md-6 text-start">
           <p className="fs-5">
-            En nuestro gimnasio encontrarás el mejor ambiente para entrenar, con
-            clases para todos los niveles, entrenadores certificados y el
-            equipamiento más completo.
-          </p>
-          <p className="fs-5">
-            ¡Sumate hoy y comenzá tu transformación física y mental!
+            Con nuestra app GYM APP podés gestionar todas tus clases de manera
+            fácil y rápida. Reservá, consultá horarios y seguí tu progreso, todo
+            desde tu celular o computadora. ¡Entrená cuando quieras, donde
+            quieras!
           </p>
 
           <button
             className="btn btn-primary btn-lg mt-3"
-            onClick={handleVerClases}>
-            Ver clases
+            onClick={handleRegister}>
+            ¡Regístrate ahora!
           </button>
         </div>
       </div>
+      <br></br>
+      <br></br>
       <div className="row align-items-center mt-4 animate__animated animate__fadeInLeft">
-        <div className="col-md-6">
+        <div className="col-md-6 text-end">
           <p className="fs-5">
             En nuestro gimnasio encontrarás el mejor ambiente para entrenar, con
             clases para todos los niveles, entrenadores certificados y el
@@ -48,12 +48,6 @@ const Home = () => {
           <p className="fs-5">
             ¡Sumate hoy y comenzá tu transformación física y mental!
           </p>
-
-          <button
-            className="btn btn-primary btn-lg mt-3"
-            onClick={handleVerClases}>
-            Ver clases
-          </button>
         </div>
 
         <div className="col-md-6 mb-4 mb-md-0">

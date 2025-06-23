@@ -12,12 +12,12 @@ const NavMenu = () => {
     <>
       {/* Botones para todos */}
       <li className="nav-item">
-        <NavLink className="nav-link text-white" to="/">
+        <NavLink className="nav-link" to="/">
           INICIO
         </NavLink>
       </li>
       <li className="nav-item">
-        <NavLink className="nav-link text-white" to="/contacto">
+        <NavLink className="nav-link" to="/contacto">
           CONTACTO
         </NavLink>
       </li>
@@ -28,14 +28,14 @@ const NavMenu = () => {
           {/* Menú Clases con subitems */}
           <li className="nav-item dropdown">
             <a
-              className="nav-link dropdown-toggle text-white"
+              className="nav-link dropdown-toggle"
               href="#"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false">
               CLASES
             </a>
-            <ul className="dropdown-menu">
+            <ul className="dropdown-menu dropdown-menu-end">
               <li>
                 <NavLink className="dropdown-item" to="/clases">
                   TODAS
@@ -61,7 +61,7 @@ const NavMenu = () => {
           {/* Botón Admin */}
           {isAdmin && (
             <li className="nav-item">
-              <NavLink className="nav-link text-white" to="/admin">
+              <NavLink className="nav-link" to="/admin">
                 USUARIOS
               </NavLink>
             </li>

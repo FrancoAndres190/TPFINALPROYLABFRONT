@@ -12,8 +12,8 @@ const Header = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div className="container">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4 sticky-top">
+      <div className="container-fluid">
         {/* Logo */}
         <Link to="/" className="navbar-brand d-flex align-items-center">
           <img
@@ -23,7 +23,7 @@ const Header = () => {
             height="40"
             className="me-2"
           />
-          <h1 className="h4 m-0">GYM APP</h1>
+          <span className="fw-bold fs-4">GYM APP</span>
         </Link>
 
         {/* Botón hamburguesa para móvil */}
@@ -31,28 +31,28 @@ const Header = () => {
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
           aria-expanded="false"
           aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
 
         {/* Contenido del navbar */}
-        <div className="collapse navbar-collapse" id="navbarNav">
+        <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
             <NavMenu />
           </ul>
 
           {/* Botones */}
-          <div className="d-flex">
+          <div className="d-flex gap-2">
             {isLoggedIn ? (
               <button className="btn btn-outline-light" onClick={handleLogout}>
                 Cerrar sesión
               </button>
             ) : (
               <>
-                <Link to="/login" className="btn btn-outline-light me-2">
+                <Link to="/login" className="btn btn-outline-light">
                   Ingresar
                 </Link>
                 <Link to="/registrar" className="btn btn-primary">
