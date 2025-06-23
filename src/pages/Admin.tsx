@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { SERVER_URL } from "../config";
 import { useAuth } from "../components/AuthContext";
 import EditUserModal from "../components/modals/EditUserModal";
+import { toast } from "react-toastify";
 
 interface Role {
   id: number;
@@ -120,13 +121,13 @@ export const Admin = () => {
         console.log(`Usuario ${userId} eliminado.`);
       } else {
         const errorData = await response.json();
-        alert(
+        toast.error(
           `Error al eliminar usuario: ${errorData.message || "error desconocido"}`
         );
       }
     } catch (err) {
       console.error("Error al eliminar usuario:", err);
-      alert("Error de red al intentar eliminar usuario.");
+      toast.error("Error de red al intentar eliminar usuario.");
     }
   };
 

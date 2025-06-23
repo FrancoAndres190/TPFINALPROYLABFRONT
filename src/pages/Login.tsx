@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { SERVER_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("a@a.com");
@@ -42,7 +43,7 @@ const Login = () => {
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      alert("Datos incorrectos.");
+      toast.warning("Datos incorrectos.");
     } finally {
       setLoading(false);
     }

@@ -6,6 +6,7 @@ import List from "../components/List";
 import Title from "../components/Title";
 import ViewClassModal from "../components/modals/ViewClassModal";
 import type { ClassItem } from "../models/ClassItem";
+import { toast } from "react-toastify";
 
 const Classes = () => {
   const [classes, setClasses] = useState<ClassItem[]>([]);
@@ -74,18 +75,18 @@ const Classes = () => {
 
       if (response.ok) {
         console.log("Unido correctamente:", result);
-        alert(result);
+        toast.success(result);
 
         setClasses((prevClasses) =>
           prevClasses.filter((cls) => cls.classID !== item.classID)
         );
       } else {
         console.error("Error al unirse:", result);
-        alert("Error: " + result);
+        toast.error(result);
       }
     } catch (error) {
       console.error("Error en la petición:", error);
-      alert("Error en la conexión");
+      toast.error("Error en la conexión");
     } finally {
       setActionClassID(null);
     }

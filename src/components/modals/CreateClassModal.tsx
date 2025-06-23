@@ -3,6 +3,7 @@ import { Modal, Button, Alert } from "react-bootstrap";
 import { SERVER_URL } from "../../config";
 import { useAuth } from "../../components/AuthContext";
 import type { ClassItem } from "../../models/ClassItem";
+import { toast } from "react-toastify";
 
 interface CreateClassModalProps {
   show: boolean;
@@ -68,7 +69,7 @@ const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
       const result = await response.json();
 
       if (response.ok) {
-        setMessage("Clase creada con éxito.");
+        toast.success("Clase creada correctamente.");
         onSave?.(result as ClassItem);
 
         setTimeout(() => {

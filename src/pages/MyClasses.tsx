@@ -6,6 +6,7 @@ import List from "../components/List";
 import Title from "../components/Title";
 import type { ClassItem } from "../models/ClassItem";
 import ViewClassModal from "../components/modals/ViewClassModal";
+import { toast } from "react-toastify";
 
 const MyClasses = () => {
   const [classes, setClasses] = useState<ClassItem[]>([]);
@@ -70,18 +71,18 @@ const MyClasses = () => {
       const result = await response.text();
 
       if (response.ok) {
-        console.log("Clase eliminada:", result);
+        toast.warning("Clase eliminada.");
 
         setClasses((prevClasses) =>
           prevClasses.filter((cls) => cls.classID !== item.classID)
         );
       } else {
         console.error("Error al quitarse de la clase:", result);
-        alert("Error: " + result);
+        toast.error("Error: " + result);
       }
     } catch (err) {
       console.error("Error en la petición:", err);
-      alert("Error en la conexión al servidor.");
+      toast.error("Error en la conexión al servidor.");
     } finally {
       setActionClassID(null);
     }

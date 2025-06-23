@@ -8,6 +8,7 @@ import CreateClassModal from "../components/modals/CreateClassModal";
 import ViewClassModal from "../components/modals/ViewClassModal"; // ⬅️ tu modal de ver clase
 import type { ClassItem } from "../models/ClassItem";
 import type { UserItem } from "../models/UserItem";
+import { toast } from "react-toastify";
 
 const CoachClasses = () => {
   const [classes, setClasses] = useState<ClassItem[]>([]);
@@ -82,7 +83,7 @@ const CoachClasses = () => {
       setViewModalVisible(true); // mostrar modal
     } catch (err) {
       console.error("Error al obtener usuarios de la clase:", err);
-      alert("Error al obtener usuarios de la clase.");
+      toast.error("Error al obtener usuarios de la clase.");
     }
   };
 
@@ -104,18 +105,18 @@ const CoachClasses = () => {
       const result = await response.text();
 
       if (response.ok) {
-        alert(result);
+        toast.success(result);
 
         setUsersInClass((prevUsers) =>
           prevUsers.filter((u) => u.userID !== user.userID)
         );
       } else {
         console.error("Error al eliminar usuario:", result);
-        alert("Error: " + result);
+        toast.error("Error: " + result);
       }
     } catch (err) {
       console.error("Error al eliminar usuario:", err);
-      alert("Error al conectar con el servidor.");
+      toast.error("Error al conectar con el servidor.");
     }
   };
 
@@ -138,18 +139,18 @@ const CoachClasses = () => {
       const result = await response.text();
 
       if (response.ok) {
-        alert("Clase eliminada.");
+        toast.success("Clase eliminada.");
 
         setClasses((prevClasses) =>
           prevClasses.filter((cls) => cls.classID !== item.classID)
         );
       } else {
         console.error("Error al eliminar clase:", result);
-        alert("Error: " + result);
+        toast.error("Error: " + result);
       }
     } catch (err) {
       console.error("Error al eliminar clase:", err);
-      alert("Error al conectar con el servidor.");
+      toast.error("Error al conectar con el servidor.");
     } finally {
       setActionClassID(null);
     }

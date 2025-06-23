@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { SERVER_URL } from "../config";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -34,11 +35,11 @@ const Register = () => {
       });
 
       if (response.ok) {
-        alert("Usuario creado correctamente");
+        toast.success("Usuario creado correctamente");
         navigate("/login");
       } else {
         const data = await response.json();
-        alert("Error al crear usuario: " + data.message);
+        toast.error("Error al crear usuario: " + data.message);
       }
     } catch (error) {
       console.error("Error en el registro:", error);
