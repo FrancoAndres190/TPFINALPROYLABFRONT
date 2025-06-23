@@ -77,12 +77,11 @@ const CreateClassModal = ({ show, onClose, onSave }: CreateClassModalProps) => {
           onClose();
         }, 500);
       } else {
-        console.error("Error al crear clase:", result);
-        setMessage(result?.message || "Error al crear clase.");
+        toast.error("Error al crear clase: ", result);
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error("Error al crear clase:", err);
-      setMessage("Error de red.");
+      toast.error("Error de red.");
     } finally {
       setLoading(false);
     }

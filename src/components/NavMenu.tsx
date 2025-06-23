@@ -22,10 +22,10 @@ const NavMenu = () => {
         </NavLink>
       </li>
 
-      {/* Si está logueado */}
+      {/* Si esta logueado */}
       {isLoggedIn && (
         <>
-          {/* Menú Clases con subitems */}
+          {/* Menu Clases con subitems */}
           <li className="nav-item dropdown">
             <a
               className="nav-link dropdown-toggle"
@@ -58,7 +58,7 @@ const NavMenu = () => {
             </ul>
           </li>
 
-          {/* Botón Admin */}
+          {/* Boton Admin */}
           {isAdmin && (
             <li className="nav-item">
               <NavLink className="nav-link" to="/admin">

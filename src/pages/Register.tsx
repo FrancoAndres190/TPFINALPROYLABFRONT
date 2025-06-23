@@ -104,24 +104,24 @@ const Register = () => {
           <input
             type="password"
             className="form-control"
-            placeholder="Password"
+            placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <label>Password</label>
+          <label>Contraseña</label>
         </div>
 
         <div className="form-floating mb-2">
           <input
             type="text"
             className="form-control"
-            placeholder="Teléfono"
+            placeholder="Telefono"
             value={tel}
             onChange={(e) => setTel(e.target.value)}
             required
           />
-          <label>Teléfono</label>
+          <label>Telefono</label>
         </div>
 
         <div className="form-floating mb-2">

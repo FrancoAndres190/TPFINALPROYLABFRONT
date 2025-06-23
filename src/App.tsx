@@ -1,10 +1,4 @@
-//mport Card, { CardBody } from "./components/Card";
-//import List from "./components/List";
-
-//const list = ["Franco", "Luciana", "Andrea", "Carlos", "Andres"];
-
 import { ToastContainer } from "react-toastify";
-
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import MyRoutes from "./router/Router";

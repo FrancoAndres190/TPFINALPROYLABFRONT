@@ -50,6 +50,7 @@ const Classes = () => {
       setClasses(data);
     } catch (err: unknown) {
       console.error("Error al obtener clases:", err);
+      toast.error("Error al obtener clases.");
     } finally {
       setIsLoading(false);
     }
@@ -88,14 +89,12 @@ const Classes = () => {
       const result = await response.text();
 
       if (response.ok) {
-        console.log("Unido correctamente:", result);
         toast.success(result);
 
         setClasses((prevClasses) =>
           prevClasses.filter((cls) => cls.classID !== item.classID)
         );
       } else {
-        console.error("Error al unirse:", result);
         toast.error(result);
       }
     } catch (error) {

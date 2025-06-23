@@ -21,7 +21,6 @@ const Contact = () => {
         </div>
 
         {/* Datos de contacto */}
-
         <div className="col-md-6 d-flex flex-column justify-content-center">
           <p className="fs-5 mb-3">
             <i className="bi bi-geo-alt-fill me-2"></i>

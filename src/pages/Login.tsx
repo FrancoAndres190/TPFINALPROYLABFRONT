@@ -7,9 +7,8 @@ import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const Login = () => {
   useDocumentTitle("Ingreso");
-  const [email, setEmail] = useState("a@a.com");
-  const [password, setPassword] = useState("123");
-  const [rememberMe, setRememberMe] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { login, roles, isLoggedIn } = useAuth();
@@ -69,12 +68,12 @@ const Login = () => {
             type="email"
             className="form-control"
             id="floatingInput"
-            placeholder="name@example.com"
+            placeholder="emal@gmail.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <label htmlFor="floatingInput">Email address</label>
+          <label htmlFor="floatingInput">Email</label>
         </div>
 
         <div className="form-floating mb-2">
@@ -82,30 +81,19 @@ const Login = () => {
             type="password"
             className="form-control"
             id="floatingPassword"
-            placeholder="Password"
+            placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <label htmlFor="floatingPassword">Password</label>
-        </div>
-
-        <div className="checkbox mb-3">
-          <label>
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-            />{" "}
-            Remember me
-          </label>
+          <label htmlFor="floatingPassword">Contraseña</label>
         </div>
 
         <button
           className="w-100 btn btn-lg btn-primary"
           type="submit"
           disabled={loading}>
-          {loading ? "Signing in..." : "Sign in"}
+          {loading ? "Ingresando..." : "Ingresar"}
         </button>
       </form>
     </main>

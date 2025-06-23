@@ -11,7 +11,7 @@ import ProtectedRoute from "../components/ProtectedRouter";
 
 const MyRoutes = () => (
   <Routes>
-    {/* Rutas públicas */}
+    {/* Rutas publicas */}
     <Route path="/home" element={<Home />} />
     <Route path="/contacto" element={<Contact />} />
     <Route path="/registrar" element={<Register />} />
@@ -55,7 +55,7 @@ const MyRoutes = () => (
       }
     />
 
-    {/* El resto */}
+    {/* Lo demas va al homee */}
     <Route path="*" element={<Home />} />
   </Routes>
 );

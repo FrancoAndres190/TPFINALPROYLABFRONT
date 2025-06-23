@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useAuth } from "./AuthContext";
 import { Navigate } from "react-router-dom";
+import Loader from "./Loader";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -12,13 +13,7 @@ const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
 
   if (initializing) {
     // Mostrar loader mientras carga el token/roles
-    return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-      </div>
-    );
+    return <Loader />;
   }
 
   if (!isLoggedIn) {

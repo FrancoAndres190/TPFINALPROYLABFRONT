@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SERVER_URL } from "../../config";
 import { useAuth } from "../AuthContext";
 import { Modal, Button, Alert } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 type Role = {
   id: number;
@@ -27,12 +28,10 @@ interface EditUserModalProps {
 
 const EditUserModal = ({ user, show, onClose, onSave }: EditUserModalProps) => {
   const { token } = useAuth();
-
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
   const [tel, setTel] = useState(user.tel);
   const [dni, setDni] = useState(user.dni);
-
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -57,19 +56,18 @@ const EditUserModal = ({ user, show, onClose, onSave }: EditUserModalProps) => {
       });
 
       if (response.ok) {
-        setMessage("Cambios guardados con éxito.");
+        toast.success("Cambios guardados con éxito.");
         onSave?.();
         setTimeout(() => {
           setMessage("");
           onClose();
         }, 1000);
       } else {
-        const errorData = await response.json();
-        setMessage(errorData.message || "Error al guardar cambios.");
+        toast.error("Error al guardar cambios.");
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error("Error al editar usuario:", err);
-      setMessage("Error de red.");
+      toast.error("Error al editar usuario.");
     } finally {
       setLoading(false);
     }

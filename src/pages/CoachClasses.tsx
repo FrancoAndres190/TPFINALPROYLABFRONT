@@ -5,7 +5,7 @@ import { useAuth } from "../components/AuthContext";
 import List from "../components/List";
 import Title from "../components/Title";
 import CreateClassModal from "../components/modals/CreateClassModal";
-import ViewClassModal from "../components/modals/ViewClassModal"; // ⬅️ tu modal de ver clase
+import ViewClassModal from "../components/modals/ViewClassModal";
 import type { ClassItem } from "../models/ClassItem";
 import type { UserItem } from "../models/UserItem";
 import { toast } from "react-toastify";
@@ -52,6 +52,7 @@ const CoachClasses = () => {
       setClasses(data);
     } catch (err) {
       console.error("Error al obtener clases del coach:", err);
+      toast.error("Error al obtener clases del coach.");
     } finally {
       setIsLoading(false);
     }
@@ -77,14 +78,15 @@ const CoachClasses = () => {
       );
 
       if (!response.ok) {
+        toast.error("Error al obtener usuarios de la clase");
         throw new Error("Error al obtener usuarios de la clase");
       }
 
       const users: UserItem[] = await response.json();
 
-      setSelectedClass(item); // info de la clase → ya la tenemos
-      setUsersInClass(users); // usuarios que nos trajo
-      setViewModalVisible(true); // mostrar modal
+      setSelectedClass(item);
+      setUsersInClass(users);
+      setViewModalVisible(true);
     } catch (err) {
       console.error("Error al obtener usuarios de la clase:", err);
       toast.error("Error al obtener usuarios de la clase.");
@@ -195,7 +197,7 @@ const CoachClasses = () => {
             if (newClass) {
               setClasses((prevClasses) => [newClass, ...prevClasses]);
             }
-            setModalVisible(false); // cerrar modal
+            setModalVisible(false);
           }}
         />
       )}

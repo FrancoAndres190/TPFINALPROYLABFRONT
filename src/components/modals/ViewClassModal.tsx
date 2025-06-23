@@ -7,7 +7,7 @@ interface ViewClassModalProps {
   show: boolean;
   onClose: () => void;
   classInfo: ClassItem | null;
-  usersInClass?: UserItem[]; // ahora es OPCIONAL
+  usersInClass?: UserItem[];
   onUserDelete?: (user: UserItem) => Promise<void>;
   actionUserID?: number | null;
 }
@@ -54,7 +54,7 @@ const ViewClassModal = ({
           <strong>Horario:</strong> {classInfo.timec}
         </div>
 
-        {/* Duración */}
+        {/* Duracion */}
         {classInfo.durationMinutes !== null && (
           <div className="mb-2">
             <strong>Duración:</strong>{" "}
@@ -62,14 +62,14 @@ const ViewClassModal = ({
           </div>
         )}
 
-        {/* Cupo máximo */}
+        {/* Cupo maximo */}
         {classInfo.maxCapacity !== null && (
           <div className="mb-2">
             <strong>Cupo máximo:</strong> {classInfo.maxCapacity} personas
           </div>
         )}
 
-        {/* Descripción */}
+        {/* Descripcion */}
         <div className="mb-3">
           <strong>Descripción:</strong> {classInfo.descrip}
         </div>
@@ -77,7 +77,7 @@ const ViewClassModal = ({
         {/* Usuarios */}
         {usersInClass !== undefined && (
           <>
-            {/* Fecha de creación */}
+            {/* Fecha de creacion */}
             {classInfo.createdAt && (
               <div className="mb-2">
                 <strong>Creada:</strong>{" "}

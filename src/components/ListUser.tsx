@@ -4,8 +4,8 @@ import type { UserItem } from "../models/UserItem";
 interface ListUserProps {
   data: UserItem[];
   onClick?: (user: UserItem) => void;
-  onDelete?: (user: UserItem) => Promise<void>; // async
-  actionUserID?: number | null; // para saber cuál está eliminando
+  onDelete?: (user: UserItem) => Promise<void>;
+  actionUserID?: number | null;
 }
 
 const ListUser = ({ data, onClick, onDelete, actionUserID }: ListUserProps) => {

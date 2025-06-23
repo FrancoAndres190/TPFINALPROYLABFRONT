@@ -57,12 +57,11 @@ export const Admin = () => {
         const data = await response.json();
         setUsers(data);
       } else {
-        const errorData = await response.json();
-        setError(errorData.message || "Error al obtener usuarios");
+        toast.error("Error al obtener usuarios");
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error("Error al obtener usuarios:", err);
-      setError("Error de red");
+      toast.error("Error al obtener usuarios.");
     } finally {
       setLoading(false);
     }
@@ -89,10 +88,11 @@ export const Admin = () => {
           const data = await response.json();
           setRolesList(data);
         } else {
-          console.error("Error al obtener roles");
+          toast.error("Error al obtener roles");
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        console.error("Error al obtener roles:", err);
+        toast.error("Error al obtener roles.");
       }
     };
 
@@ -128,8 +128,8 @@ export const Admin = () => {
           `Error al eliminar usuario: ${errorData.message || "error desconocido"}`
         );
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error("Error al eliminar usuario:", err);
       toast.error("Error de red al intentar eliminar usuario.");
     }
   };
@@ -143,9 +143,9 @@ export const Admin = () => {
   const handleConfirmPayMembership = async () => {
     if (!payingUserId) return;
 
+    //Calculamos la fecha
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
     const paidUntil = new Date(today);
     paidUntil.setMonth(paidUntil.getMonth() + payMonths);
 

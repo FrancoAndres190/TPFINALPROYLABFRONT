@@ -17,7 +17,7 @@ const MyClasses = () => {
   const { token, isLoggedIn } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [actionClassID, setActionClassID] = useState<number | null>(null);
-  const [filterText, setFilterText] = useState(""); // FILTRO
+  const [filterText, setFilterText] = useState("");
 
   const [selectedClass, setSelectedClass] = useState<ClassItem | null>(null);
   const [viewModalVisible, setViewModalVisible] = useState(false);
@@ -42,6 +42,7 @@ const MyClasses = () => {
       const data = await response.json();
       setClasses(data);
     } catch (err: unknown) {
+      toast.error("Error al obtener clases.");
       console.error("Error al obtener clases:", err);
     } finally {
       setIsLoading(false);
@@ -92,7 +93,6 @@ const MyClasses = () => {
     }
   };
 
-  // Filtro por nombre
   const filteredClasses = classes.filter((cls) =>
     cls.name.toLowerCase().includes(filterText.toLowerCase())
   );
@@ -121,7 +121,7 @@ const MyClasses = () => {
           </div>
 
           <List
-            key={filterText} // para re-animar
+            key={filterText}
             data={filteredClasses}
             onDelete={handleSelect}
             onClick={handleClick}
