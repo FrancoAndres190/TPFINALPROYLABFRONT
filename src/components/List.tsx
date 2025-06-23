@@ -35,16 +35,22 @@ function List({
           style={{ animationDelay: `${i * 0.2}s` }}>
           <div>
             <span className="me-2">
-              <strong>{item.name}</strong> – {item.timec}
+              <strong>{item.name}</strong> – {item.timec}hs
             </span>
             <span
               className={`badge ${item.dispo ? "bg-success" : "bg-secondary"}`}>
               {item.dispo ? "Disponible" : "No disponible"}
             </span>
-            <div className="d-block small">Profesor: {item.coachName}</div>
+
+            {/*El profesor no ve su nombre en sus clases*/}
+            {(isUser || (!isUser && !!onAdd)) && (
+              <div className="d-block small">Profesor: {item.coachName}</div>
+            )}
+
             {item.maxCapacity !== null && (
               <div className="d-block small">Cupos: {item.maxCapacity}</div>
             )}
+
             {item.durationMinutes !== null && (
               <div className="d-block small">
                 Duración: {item.durationMinutes} minutos
