@@ -7,20 +7,55 @@ import MyClasses from "../pages/MyClasses";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
 import CoachClasses from "../pages/CoachClasses";
-
-/*Ingresa a login o cualquier otra ruta y redirige a login/landing
-  si no esta logueado, manda al login */
+import ProtectedRoute from "../components/ProtectedRouter";
 
 const MyRoutes = () => (
   <Routes>
+    {/* Rutas públicas */}
     <Route path="/home" element={<Home />} />
     <Route path="/contacto" element={<Contact />} />
-    <Route path="/clases" element={<Classes />} />
     <Route path="/registrar" element={<Register />} />
-    <Route path="/misclases" element={<MyClasses />} />
-    <Route path="/admin" element={<Admin />} />
-    <Route path="/coach" element={<CoachClasses />} />
     <Route path="/login" element={<Login />} />
+
+    {/* Rutas autenticadas */}
+    <Route
+      path="/clases"
+      element={
+        <ProtectedRoute>
+          <Classes />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/misclases"
+      element={
+        <ProtectedRoute>
+          <MyClasses />
+        </ProtectedRoute>
+      }
+    />
+
+    {/* Rutas ROLE_COACH */}
+    <Route
+      path="/coach"
+      element={
+        <ProtectedRoute allowedRoles={["ROLE_COACH"]}>
+          <CoachClasses />
+        </ProtectedRoute>
+      }
+    />
+
+    {/* Rutas ROLE_ADMIN */}
+    <Route
+      path="/admin"
+      element={
+        <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
+          <Admin />
+        </ProtectedRoute>
+      }
+    />
+
+    {/* El resto */}
     <Route path="*" element={<Home />} />
   </Routes>
 );

@@ -38,13 +38,11 @@ const Classes = () => {
       });
 
       if (!response.ok) {
-        console.log(response);
         navigate("/login");
         return;
       }
 
       const data = await response.json();
-      console.log(data);
       setClasses(data);
     } catch (err: unknown) {
       console.error("Error al obtener clases:", err);
