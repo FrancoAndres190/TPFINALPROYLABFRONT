@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { SERVER_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
@@ -9,8 +9,17 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { login, roles } = useAuth();
+  const { login, roles, token } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) return; // no estamos logueados
+    if (roles.includes("ROLE_COACH")) {
+      navigate("/coach");
+    } else if (roles.includes("ROLE_USER")) {
+      navigate("/clases");
+    }
+  });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -30,18 +39,10 @@ const Login = () => {
 
       if (response.ok) {
         login(data.token);
-
-        if (roles.includes("ROLE_COACH")) {
-          navigate("/coach");
-        } else {
-          navigate("/clases");
-        }
-
-        //console.log(`token ${data.token}`);
-        console.log(roles);
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error("Error en el login:", error);
+      alert("Datos incorrectos.");
     } finally {
       setLoading(false);
     }
