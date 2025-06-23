@@ -9,8 +9,11 @@ import ViewClassModal from "../components/modals/ViewClassModal"; // ⬅️ tu m
 import type { ClassItem } from "../models/ClassItem";
 import type { UserItem } from "../models/UserItem";
 import { toast } from "react-toastify";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const CoachClasses = () => {
+  useDocumentTitle("Panel para profesores");
+
   const [classes, setClasses] = useState<ClassItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);

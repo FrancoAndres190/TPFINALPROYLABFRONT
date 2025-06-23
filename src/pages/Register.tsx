@@ -2,8 +2,10 @@ import { useState, type FormEvent } from "react";
 import { SERVER_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const Register = () => {
+  useDocumentTitle("Registro");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

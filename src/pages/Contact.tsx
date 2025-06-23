@@ -1,6 +1,8 @@
 import Title from "../components/Title";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const Contact = () => {
+  useDocumentTitle("Contacto");
   return (
     <div className="container animate__animated animate__fadeInUp">
       <Title>Contacto</Title>

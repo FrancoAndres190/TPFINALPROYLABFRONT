@@ -7,8 +7,10 @@ import Title from "../components/Title";
 import ViewClassModal from "../components/modals/ViewClassModal";
 import type { ClassItem } from "../models/ClassItem";
 import { toast } from "react-toastify";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const Classes = () => {
+  useDocumentTitle("Clases");
   const [classes, setClasses] = useState<ClassItem[]>([]);
   const { token, isLoggedIn } = useAuth();
   const [isLoading, setIsLoading] = useState(true);

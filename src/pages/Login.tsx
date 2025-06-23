@@ -3,8 +3,10 @@ import { SERVER_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import { toast } from "react-toastify";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const Login = () => {
+  useDocumentTitle("Ingreso");
   const [email, setEmail] = useState("a@a.com");
   const [password, setPassword] = useState("123");
   const [rememberMe, setRememberMe] = useState(false);

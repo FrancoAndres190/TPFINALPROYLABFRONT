@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import Title from "../components/Title";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const Home = () => {
+  useDocumentTitle("Inicio");
   const navigate = useNavigate();
 
   const handleRegister = () => {
