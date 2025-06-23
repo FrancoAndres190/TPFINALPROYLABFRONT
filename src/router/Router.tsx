@@ -1,4 +1,3 @@
-import { CreateClasses } from "../pages/CreateClasses";
 import { Admin } from "../pages/Admin";
 import Login from "../pages/Login";
 import { Route, Routes } from "react-router-dom";
@@ -18,7 +17,6 @@ const MyRoutes = () => (
     <Route path="/contacto" element={<Contact />} />
     <Route path="/clases" element={<Classes />} />
     <Route path="/registrar" element={<Register />} />
-    <Route path="/crearclases" element={<CreateClasses />} />
     <Route path="/misclases" element={<MyClasses />} />
     <Route path="/admin" element={<Admin />} />
     <Route path="/coach" element={<CoachClasses />} />
