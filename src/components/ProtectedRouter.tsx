@@ -8,17 +8,27 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
-  const { isLoggedIn, roles } = useAuth();
+  const { isLoggedIn, roles, initializing } = useAuth();
+
+  if (initializing) {
+    // Mostrar loader mientras carga el token/roles
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    );
+  }
 
   if (!isLoggedIn) {
-    // Si no está logueado → al login
     return <Navigate to="/login" replace />;
   }
 
-  const hasAccess = roles.some((role) => allowedRoles?.includes(role));
+  const hasAccess =
+    !allowedRoles || roles.some((role) => allowedRoles.includes(role));
 
   if (!hasAccess) {
-    // Si está logueado pero no tiene el rol → a home
     return <Navigate to="/home" replace />;
   }
 

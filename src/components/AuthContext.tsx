@@ -10,6 +10,7 @@ interface AuthContextType {
   isLoggedIn: boolean;
   token: string | null;
   roles: string[];
+  initializing: boolean; // 🚀 nuevo
   login: (token: string) => void;
   logout: () => void;
 }
@@ -18,53 +19,53 @@ const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
   token: null,
   roles: [],
+  initializing: true, // 🚀 nuevo
   login: () => {},
   logout: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(() =>
-    localStorage.getItem("token")
-  );
-
-  const [isLoggedIn, setIsLoggedIn] = useState(() => isTokenValid());
-
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [roles, setRoles] = useState<string[]>([]);
+  const [initializing, setInitializing] = useState(true); // 🚀 nuevo
 
   useEffect(() => {
-    setIsLoggedIn(isTokenValid());
-  }, [token]);
+    const storedToken = localStorage.getItem("token");
 
-  useEffect(() => {
-    if (token) {
-      const payload = JSON.parse(atob(token.split(".")[1]));
+    if (storedToken) {
+      setToken(storedToken);
+      const payload = JSON.parse(atob(storedToken.split(".")[1]));
       setRoles(payload.roles || []);
+      setIsLoggedIn(true);
     } else {
+      setToken(null);
       setRoles([]);
+      setIsLoggedIn(false);
     }
-  }, [token]);
 
-  function isTokenValid(): boolean {
-    return !!localStorage.getItem("token");
-  }
+    setInitializing(false); // 🚀 importante: marcamos que ya procesamos el token
+  }, []);
 
   const login = (newToken: string) => {
-    //Guardamos el token
     localStorage.setItem("token", newToken);
     setToken(newToken);
 
-    //Guardamos los roles
     const payload = JSON.parse(atob(newToken.split(".")[1]));
-    setRoles(payload.roles);
+    setRoles(payload.roles || []);
+    setIsLoggedIn(true);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);
+    setRoles([]);
+    setIsLoggedIn(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, token, roles, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, token, roles, initializing, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

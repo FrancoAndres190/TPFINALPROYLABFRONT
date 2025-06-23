@@ -12,17 +12,14 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { login, roles, token } = useAuth();
+  const { login, roles, isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token) return; // no estamos logueados
-    if (roles.includes("ROLE_COACH")) {
-      navigate("/coach");
-    } else if (roles.includes("ROLE_USER")) {
-      navigate("/clases");
-    }
-  });
+    if (!isLoggedIn) return;
+
+    navigate("/clases");
+  }, [isLoggedIn, roles, navigate]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
