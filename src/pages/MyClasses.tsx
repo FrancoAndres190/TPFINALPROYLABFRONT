@@ -8,6 +8,7 @@ import type { ClassItem } from "../models/ClassItem";
 import ViewClassModal from "../components/modals/ViewClassModal";
 import { toast } from "react-toastify";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import Loader from "../components/Loader";
 
 const MyClasses = () => {
   useDocumentTitle("Mis Clases");
@@ -101,7 +102,7 @@ const MyClasses = () => {
       <Title>Mis clases</Title>
 
       {isLoading ? (
-        <p className="text-center my-4">Cargando...</p>
+        <Loader />
       ) : classes.length === 0 ? (
         <p className="text-center my-4 animate__animated animate__bounce">
           No te has anotado a ninguna clase.

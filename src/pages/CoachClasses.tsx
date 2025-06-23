@@ -10,6 +10,7 @@ import type { ClassItem } from "../models/ClassItem";
 import type { UserItem } from "../models/UserItem";
 import { toast } from "react-toastify";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import Loader from "../components/Loader";
 
 const CoachClasses = () => {
   useDocumentTitle("Panel para profesores");
@@ -172,7 +173,7 @@ const CoachClasses = () => {
       </div>
 
       {isLoading ? (
-        <p className="text-center my-4">Cargando clases...</p>
+        <Loader />
       ) : classes.length === 0 ? (
         <p className="text-center my-4 animate__animated animate__bounce">
           No has creado ninguna clase.

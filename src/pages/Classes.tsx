@@ -8,17 +8,21 @@ import ViewClassModal from "../components/modals/ViewClassModal";
 import type { ClassItem } from "../models/ClassItem";
 import { toast } from "react-toastify";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import Loader from "../components/Loader";
 
 const Classes = () => {
   useDocumentTitle("Clases");
   const [classes, setClasses] = useState<ClassItem[]>([]);
-  const { token, isLoggedIn } = useAuth();
+  const { token, isLoggedIn, membershipActive, roles } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [actionClassID, setActionClassID] = useState<number | null>(null);
   const [filterText, setFilterText] = useState("");
 
   const [selectedClass, setSelectedClass] = useState<ClassItem | null>(null);
   const [viewModalVisible, setViewModalVisible] = useState(false);
+
+  const isAdmin = roles.includes("ROLE_ADMIN");
+  const isCoach = roles.includes("ROLE_COACH");
 
   const navigate = useNavigate();
 
@@ -55,8 +59,18 @@ const Classes = () => {
     fetchClasses();
   }, [isLoggedIn, navigate, token]);
 
+  useEffect(() => {
+    if (!isLoading && isLoggedIn && !membershipActive && !isAdmin && !isCoach) {
+      toast.warn("Su membresía no está activa. Por favor regularice el pago.");
+    }
+  }, [isLoading, isLoggedIn, membershipActive]);
+
   const handleSelect = async (item: ClassItem) => {
     try {
+      if (!membershipActive) {
+        toast.warn("Su membresía no está activa. No puede reservar clases.");
+        return;
+      }
       setActionClassID(item.classID);
 
       const response = await fetch(
@@ -106,7 +120,7 @@ const Classes = () => {
       <Title>Clases</Title>
 
       {isLoading ? (
-        <p className="text-center my-4">Cargando...</p>
+        <Loader />
       ) : (
         <>
           <div className="mb-3 text-center">

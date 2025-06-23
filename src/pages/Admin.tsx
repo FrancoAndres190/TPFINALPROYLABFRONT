@@ -18,6 +18,8 @@ interface User {
   dni: string;
   roles: Role[];
   memberType: string;
+  membershipPaidUntil: string;
+  membershipActive: boolean;
 }
 
 export const Admin = () => {
@@ -32,7 +34,10 @@ export const Admin = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  // 🚀 fetchUsers para refrescar luego de editar
+  const [payModalVisible, setPayModalVisible] = useState(false);
+  const [payingUserId, setPayingUserId] = useState<number | null>(null);
+  const [payMonths, setPayMonths] = useState(1);
+
   const fetchUsers = async () => {
     if (!token) return;
 
@@ -63,12 +68,10 @@ export const Admin = () => {
     }
   };
 
-  // Cargar usuarios
   useEffect(() => {
     fetchUsers();
   }, [token]);
 
-  // Cargar lista de roles
   useEffect(() => {
     const fetchRoles = async () => {
       if (!token) return;
@@ -118,7 +121,7 @@ export const Admin = () => {
 
       if (response.ok) {
         setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
-        console.log(`Usuario ${userId} eliminado.`);
+        toast.success(`Usuario ${userId} eliminado.`);
       } else {
         const errorData = await response.json();
         toast.error(
@@ -128,6 +131,54 @@ export const Admin = () => {
     } catch (err) {
       console.error("Error al eliminar usuario:", err);
       toast.error("Error de red al intentar eliminar usuario.");
+    }
+  };
+
+  const openPayModal = (userId: number) => {
+    setPayingUserId(userId);
+    setPayMonths(1);
+    setPayModalVisible(true);
+  };
+
+  const handleConfirmPayMembership = async () => {
+    if (!payingUserId) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const paidUntil = new Date(today);
+    paidUntil.setMonth(paidUntil.getMonth() + payMonths);
+
+    const paidUntilStr = paidUntil.toISOString().split("T")[0];
+
+    try {
+      const response = await fetch(`${SERVER_URL}/admin/users/pay`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userId: payingUserId,
+          membershipPaidUntil: paidUntilStr,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success(`Pago registrado correctamente.`);
+        fetchUsers();
+      } else {
+        const errorData = await response.json();
+        toast.error(
+          `Error al registrar pago: ${errorData.message || "error desconocido"}`
+        );
+      }
+    } catch (err) {
+      console.error("Error al registrar pago:", err);
+      toast.error("Error de red al intentar registrar pago.");
+    } finally {
+      setPayModalVisible(false);
+      setPayingUserId(null);
     }
   };
 
@@ -185,6 +236,7 @@ export const Admin = () => {
               <th>Nombre</th>
               <th>Email</th>
               <th>Rol</th>
+              <th>Mensualidad</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -198,10 +250,22 @@ export const Admin = () => {
                 <td>{user.email}</td>
                 <td>{user.roles.map((role) => role.name).join(", ")}</td>
                 <td>
+                  {user.membershipPaidUntil
+                    ? `${user.membershipPaidUntil} (${
+                        user.membershipActive ? "Activo" : "Vencido"
+                      })`
+                    : "Sin pago"}
+                </td>
+                <td>
                   <button
                     className="btn btn-sm btn-primary me-2"
                     onClick={() => handleEdit(user)}>
                     Editar
+                  </button>
+                  <button
+                    className="btn btn-sm btn-success me-2"
+                    onClick={() => openPayModal(user.id)}>
+                    Registrar pago
                   </button>
                   <button
                     className="btn btn-sm btn-danger"
@@ -219,7 +283,6 @@ export const Admin = () => {
         <p>No hay usuarios que coincidan con el filtro.</p>
       )}
 
-      {/* Modal para editar usuario*/}
       {selectedUser && (
         <EditUserModal
           user={{
@@ -238,6 +301,47 @@ export const Admin = () => {
             setModalVisible(false);
           }}
         />
+      )}
+
+      {payModalVisible && (
+        <div className="modal show d-block" tabIndex={-1}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Registrar Pago</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setPayModalVisible(false)}></button>
+              </div>
+              <div className="modal-body">
+                <label className="form-label">Cantidad de meses:</label>
+                <select
+                  className="form-select"
+                  value={payMonths}
+                  onChange={(e) => setPayMonths(parseInt(e.target.value))}>
+                  {[1, 2, 3, 4, 5, 6].map((n) => (
+                    <option key={n} value={n}>
+                      {n} {n === 1 ? "mes" : "meses"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setPayModalVisible(false)}>
+                  Cancelar
+                </button>
+                <button
+                  className="btn btn-primary"
+                  onClick={handleConfirmPayMembership}>
+                  Confirmar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SERVER_URL } from "../../config";
 import { useAuth } from "../AuthContext";
-import { Modal, Button, Alert, Form } from "react-bootstrap";
+import { Modal, Button, Alert } from "react-bootstrap";
 
 type Role = {
   id: number;
@@ -32,42 +32,9 @@ const EditUserModal = ({ user, show, onClose, onSave }: EditUserModalProps) => {
   const [lastName, setLastName] = useState(user.lastName);
   const [tel, setTel] = useState(user.tel);
   const [dni, setDni] = useState(user.dni);
-  const [memberType, setMemberType] = useState(user.memberType);
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
-  const [memberTypes, setMemberTypes] = useState<string[]>([
-    "Premium",
-    "Básico",
-    "VIP",
-  ]);
-
-  // 🚀 fetch lista de membresías
-  useEffect(() => {
-    const fetchMemberTypes = async () => {
-      try {
-        const response = await fetch(`${SERVER_URL}/admin/membertypes`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setMemberTypes(data);
-        } else {
-          console.warn("No se pudo obtener lista de membresías, usando demo");
-        }
-      } catch (err) {
-        console.error("Error al obtener memberTypes:", err);
-      }
-    };
-
-    fetchMemberTypes();
-  }, [token]);
 
   const handleSave = async () => {
     setLoading(true);
@@ -86,7 +53,6 @@ const EditUserModal = ({ user, show, onClose, onSave }: EditUserModalProps) => {
           lastName,
           tel,
           dni,
-          memberType,
         }),
       });
 
@@ -185,27 +151,6 @@ const EditUserModal = ({ user, show, onClose, onSave }: EditUserModalProps) => {
           <label htmlFor="editDniInput" className="text-secondary">
             DNI
           </label>
-        </div>
-
-        {/* Membresía */}
-        <div className="mb-3">
-          <label
-            htmlFor="editMemberTypeSelect"
-            className="form-label text-secondary fw-bold">
-            Membresía
-          </label>
-          <Form.Select
-            className="form-select bg-dark text-white"
-            id="editMemberTypeSelect"
-            value={memberType}
-            onChange={(e) => setMemberType(e.target.value)}>
-            <option value="">Seleccionar membresía</option>
-            {memberTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </Form.Select>
         </div>
       </Modal.Body>
 

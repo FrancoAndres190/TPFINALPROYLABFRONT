@@ -10,7 +10,8 @@ interface AuthContextType {
   isLoggedIn: boolean;
   token: string | null;
   roles: string[];
-  initializing: boolean; // 🚀 nuevo
+  membershipActive: boolean;
+  initializing: boolean;
   login: (token: string) => void;
   logout: () => void;
 }
@@ -19,7 +20,8 @@ const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
   token: null,
   roles: [],
-  initializing: true, // 🚀 nuevo
+  membershipActive: false,
+  initializing: true,
   login: () => {},
   logout: () => {},
 });
@@ -28,7 +30,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [roles, setRoles] = useState<string[]>([]);
-  const [initializing, setInitializing] = useState(true); // 🚀 nuevo
+  const [initializing, setInitializing] = useState(true);
+  const [membershipActive, setMembershipActive] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -37,14 +40,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setToken(storedToken);
       const payload = JSON.parse(atob(storedToken.split(".")[1]));
       setRoles(payload.roles || []);
+      setMembershipActive(payload.membershipActive === true);
       setIsLoggedIn(true);
     } else {
       setToken(null);
       setRoles([]);
+      setMembershipActive(false);
       setIsLoggedIn(false);
     }
 
-    setInitializing(false); // 🚀 importante: marcamos que ya procesamos el token
+    setInitializing(false);
   }, []);
 
   const login = (newToken: string) => {
@@ -53,6 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const payload = JSON.parse(atob(newToken.split(".")[1]));
     setRoles(payload.roles || []);
+    setMembershipActive(payload.membershipActive === true);
     setIsLoggedIn(true);
   };
 
@@ -65,7 +71,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, token, roles, initializing, login, logout }}>
+      value={{
+        isLoggedIn,
+        token,
+        roles,
+        membershipActive,
+        initializing,
+        login,
+        logout,
+      }}>
       {children}
     </AuthContext.Provider>
   );
