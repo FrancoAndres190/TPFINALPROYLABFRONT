@@ -73,7 +73,9 @@ const Header = () => {
                   className="dropdown-menu dropdown-menu-end"
                   aria-labelledby="userDropdown">
                   <li>
-                    <button className="dropdown-item" onClick={handleLogout}>
+                    <button
+                      className="dropdown-item text-center"
+                      onClick={handleLogout}>
                       Cerrar sesión
                     </button>
                   </li>
