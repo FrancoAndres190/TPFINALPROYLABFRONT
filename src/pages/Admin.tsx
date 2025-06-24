@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { SERVER_URL } from "../config";
 import { useAuth } from "../components/AuthContext";
-import EditUserModal from "../components/modals/EditUserModal";
 import { toast } from "react-toastify";
 
 interface Role {
@@ -30,10 +29,6 @@ export const Admin = () => {
   const [error, setError] = useState("");
   const [filterText, setFilterText] = useState("");
   const [filterRole, setFilterRole] = useState("");
-
-  const [modalVisible, setModalVisible] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const [payModalVisible, setPayModalVisible] = useState(false);
   const [payingUserId, setPayingUserId] = useState<number | null>(null);
@@ -304,26 +299,6 @@ export const Admin = () => {
 
       {!loading && filteredUsers.length === 0 && !error && (
         <p>No hay usuarios que coincidan con el filtro.</p>
-      )}
-
-      {selectedUser && (
-        <EditUserModal
-          user={{
-            userEmail: selectedUser.email,
-            firstName: selectedUser.firstName,
-            lastName: selectedUser.lastName,
-            tel: selectedUser.tel,
-            dni: selectedUser.dni,
-            roles: selectedUser.roles,
-            memberType: selectedUser.memberType,
-          }}
-          show={modalVisible}
-          onClose={() => setModalVisible(false)}
-          onSave={() => {
-            fetchUsers();
-            setModalVisible(false);
-          }}
-        />
       )}
 
       {payModalVisible && (
