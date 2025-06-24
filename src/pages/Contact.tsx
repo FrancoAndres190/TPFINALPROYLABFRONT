@@ -25,7 +25,7 @@ const Contact = () => {
           <p className="fs-5 mb-3">
             <i className="bi bi-geo-alt-fill me-2"></i>
             <strong>Dirección: </strong>
-            <a href="https://www.google.com/maps?ll=-32.956883,-60.646898&z=16&t=m&hl=es-419&gl=AR&mapclient=embed&cid=1293047481148706256">
+            <a href="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3347.692586811583!2d-60.65001972496992!3d-32.959124773588066!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95b7ab0c4772a28f%3A0xed15839dd0f50c48!2sParaguay%201950%2C%20S2000FZF%20Rosario%2C%20Santa%20Fe!5e0!3m2!1ses-419!2sar!4v1750781537211!5m2!1ses-419!2sar">
               Paraguay 1950
             </a>
           </p>
