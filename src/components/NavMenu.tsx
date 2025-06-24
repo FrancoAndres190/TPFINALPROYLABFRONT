@@ -41,14 +41,14 @@ const NavMenu = () => {
                   TODAS
                 </NavLink>
               </li>
-              {(isUser || isAdmin) && (
+              {isUser && !isAdmin && !isCoach && (
                 <li>
                   <NavLink className="dropdown-item" to="/misclases">
                     MIS CLASES
                   </NavLink>
                 </li>
               )}
-              {(isCoach || isAdmin) && (
+              {isCoach && (
                 <li>
                   <NavLink className="dropdown-item" to="/coach">
                     MIS CLASES CREADAS

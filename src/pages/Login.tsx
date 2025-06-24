@@ -14,10 +14,19 @@ const Login = () => {
   const { login, roles, isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isLoggedIn) return;
+  const isCoach = roles.includes("ROLE_COACH");
+  const isAdmin = roles.includes("ROLE_ADMIN");
 
-    navigate("/clases");
+  useEffect(() => {
+    if (isLoggedIn) {
+      if (isAdmin) {
+        navigate("/admin");
+      } else if (isCoach) {
+        navigate("/coach");
+      } else {
+        navigate("/clases");
+      }
+    }
   }, [isLoggedIn, roles, navigate]);
 
   const handleSubmit = async (e: FormEvent) => {
