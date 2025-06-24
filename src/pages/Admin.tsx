@@ -32,6 +32,7 @@ export const Admin = () => {
   const [filterRole, setFilterRole] = useState("");
 
   const [modalVisible, setModalVisible] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const [payModalVisible, setPayModalVisible] = useState(false);
@@ -98,11 +99,6 @@ export const Admin = () => {
 
     fetchRoles();
   }, [token]);
-
-  const handleEdit = (user: User) => {
-    setSelectedUser(user);
-    setModalVisible(true);
-  };
 
   const handleDelete = async (userId: number) => {
     const confirmDelete = window.confirm(
@@ -258,19 +254,14 @@ export const Admin = () => {
                 </td>
                 <td>
                   <button
-                    className="btn btn-sm btn-primary me-2"
-                    onClick={() => handleEdit(user)}>
-                    Editar
-                  </button>
-                  <button
-                    className="btn btn-sm btn-success me-2"
-                    onClick={() => openPayModal(user.id)}>
-                    Registrar pago
-                  </button>
-                  <button
-                    className="btn btn-sm btn-danger"
+                    className="btn btn-sm btn-danger me-2"
                     onClick={() => handleDelete(user.id)}>
                     Eliminar
+                  </button>
+                  <button
+                    className="btn btn-sm btn-success"
+                    onClick={() => openPayModal(user.id)}>
+                    Registrar pago
                   </button>
                 </td>
               </tr>
