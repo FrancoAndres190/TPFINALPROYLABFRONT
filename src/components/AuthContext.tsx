@@ -12,6 +12,7 @@ interface AuthContextType {
   roles: string[];
   membershipActive: boolean;
   initializing: boolean;
+  nombreUsuario: string;
   login: (token: string) => void;
   logout: () => void;
 }
@@ -22,6 +23,7 @@ const AuthContext = createContext<AuthContextType>({
   roles: [],
   membershipActive: false,
   initializing: true,
+  nombreUsuario: "",
   login: () => {},
   logout: () => {},
 });
@@ -32,6 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [roles, setRoles] = useState<string[]>([]);
   const [initializing, setInitializing] = useState(true);
   const [membershipActive, setMembershipActive] = useState(false);
+  const [nombreUsuario, setNombreUsuario] = useState("");
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -41,6 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const payload = JSON.parse(atob(storedToken.split(".")[1]));
       setRoles(payload.roles || []);
       setMembershipActive(payload.membershipActive === true);
+      setNombreUsuario(payload.nombre || null);
       setIsLoggedIn(true);
     } else {
       setToken(null);
@@ -57,6 +61,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setToken(newToken);
 
     const payload = JSON.parse(atob(newToken.split(".")[1]));
+
+    setNombreUsuario(payload.nombre || "");
     setRoles(payload.roles || []);
     setMembershipActive(payload.membershipActive === true);
     setIsLoggedIn(true);
@@ -77,6 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         roles,
         membershipActive,
         initializing,
+        nombreUsuario,
         login,
         logout,
       }}>

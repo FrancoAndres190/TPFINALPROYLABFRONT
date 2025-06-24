@@ -3,13 +3,20 @@ import { useAuth } from "./AuthContext";
 import NavMenu from "./NavMenu";
 
 const Header = () => {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, roles, nombreUsuario } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
+
+  // Detectar rol principal
+  let rolPrincipal = "";
+
+  if (roles.includes("ROLE_ADMIN")) rolPrincipal = "ADMIN";
+  else if (roles.includes("ROLE_COACH")) rolPrincipal = "PROFESOR";
+  else if (roles.includes("ROLE_USER")) rolPrincipal = "USUARIO";
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4 sticky-top">
@@ -44,12 +51,34 @@ const Header = () => {
             <NavMenu />
           </ul>
 
-          {/* Botones */}
-          <div className="d-flex gap-2">
+          {/* Botón usuario / Ingresar */}
+          <div className="d-flex gap-2 align-items-center">
             {isLoggedIn ? (
-              <button className="btn btn-outline-light" onClick={handleLogout}>
-                Cerrar sesión
-              </button>
+              <div className="dropdown text-end">
+                <button
+                  className="btn btn-dark dropdown-toggle text-center"
+                  type="button"
+                  id="userDropdown"
+                  data-bs-toggle="dropdown"
+                  style={{ minWidth: "160px" }}
+                  aria-expanded="false">
+                  <div style={{ fontSize: "0.9rem", color: "#ccc" }}>
+                    {nombreUsuario}
+                  </div>
+                  <div style={{ fontSize: "0.75rem", color: "#999" }}>
+                    {rolPrincipal}
+                  </div>
+                </button>
+                <ul
+                  className="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="userDropdown">
+                  <li>
+                    <button className="dropdown-item" onClick={handleLogout}>
+                      Cerrar sesión
+                    </button>
+                  </li>
+                </ul>
+              </div>
             ) : (
               <>
                 <Link to="/login" className="btn btn-outline-light">
