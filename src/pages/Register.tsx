@@ -10,6 +10,7 @@ const Register = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [tel, setTel] = useState("");
   const [dni, setDni] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,12 @@ const Register = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      toast.error("Las contraseñas no coinciden.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -40,8 +47,8 @@ const Register = () => {
         toast.success("Usuario creado correctamente");
         navigate("/login");
       } else {
-        const data = await response.json();
-        toast.error("Error al crear usuario: " + data.message);
+        const data = await response.text();
+        toast.error(data);
       }
     } catch (error) {
       console.error("Error en el registro:", error);
@@ -53,7 +60,7 @@ const Register = () => {
   return (
     <main
       className="form-signin w-100 m-auto text-center animate__animated animate__fadeInDown"
-      style={{ maxWidth: "330px", padding: "1rem" }}>
+      style={{ maxWidth: "600px", padding: "1rem" }}>
       <form onSubmit={handleSubmit}>
         <img
           className="mb-4"
@@ -64,76 +71,104 @@ const Register = () => {
         />
         <h1 className="h3 mb-3 fw-normal">Registro de Usuario</h1>
 
-        <div className="form-floating mb-2">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Nombre"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-          <label>Nombre</label>
-        </div>
+        <div className="row g-3 mb-3 text-start">
+          <div className="col-md-12">
+            <div className="form-floating">
+              <input
+                type="email"
+                className="form-control"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <label>Email</label>
+            </div>
+          </div>
 
-        <div className="form-floating mb-2">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Apellido"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-          <label>Apellido</label>
-        </div>
+          <div className="col-md-6">
+            <div className="form-floating">
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <label>Contraseña</label>
+            </div>
+          </div>
 
-        <div className="form-floating mb-2">
-          <input
-            type="email"
-            className="form-control"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <label>Email</label>
-        </div>
+          <div className="col-md-6">
+            <div className="form-floating">
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Confirmar contraseña"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <label>Confirmar contraseña</label>
+            </div>
+          </div>
 
-        <div className="form-floating mb-2">
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <label>Contraseña</label>
-        </div>
+          <div className="col-md-6">
+            <div className="form-floating">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Nombre"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+              />
+              <label>Nombre</label>
+            </div>
+          </div>
 
-        <div className="form-floating mb-2">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Telefono"
-            value={tel}
-            onChange={(e) => setTel(e.target.value)}
-            required
-          />
-          <label>Telefono</label>
-        </div>
+          <div className="col-md-6">
+            <div className="form-floating">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Apellido"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+              />
+              <label>Apellido</label>
+            </div>
+          </div>
 
-        <div className="form-floating mb-2">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="DNI"
-            value={dni}
-            onChange={(e) => setDni(e.target.value)}
-            required
-          />
-          <label>DNI</label>
+          <div className="col-md-6">
+            <div className="form-floating">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Telefono"
+                value={tel}
+                onChange={(e) => setTel(e.target.value)}
+                required
+              />
+              <label>Teléfono</label>
+            </div>
+          </div>
+
+          <div className="col-md-6">
+            <div className="form-floating">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="DNI"
+                value={dni}
+                onChange={(e) => setDni(e.target.value)}
+                required
+              />
+              <label>DNI</label>
+            </div>
+          </div>
         </div>
 
         <button
