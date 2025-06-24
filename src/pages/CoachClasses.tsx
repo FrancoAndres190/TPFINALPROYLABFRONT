@@ -11,6 +11,7 @@ import type { UserItem } from "../models/UserItem";
 import { toast } from "react-toastify";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import Loader from "../components/Loader";
+import FilterInput from "../components/FilterInput";
 
 const CoachClasses = () => {
   useDocumentTitle("Panel para profesores");
@@ -23,6 +24,7 @@ const CoachClasses = () => {
   const [selectedClass, setSelectedClass] = useState<ClassItem | null>(null);
   const [usersInClass, setUsersInClass] = useState<UserItem[]>([]);
   const [viewModalVisible, setViewModalVisible] = useState(false);
+  const [filterText, setFilterText] = useState("");
 
   const { token, isLoggedIn } = useAuth();
   const navigate = useNavigate();
@@ -61,6 +63,10 @@ const CoachClasses = () => {
   useEffect(() => {
     fetchClasses();
   }, [isLoggedIn, navigate, token]);
+
+  const filteredClasses = classes.filter((cls) =>
+    cls.name.toLowerCase().includes(filterText.toLowerCase())
+  );
 
   // Cuando clickeamos en una tarjeta
   const handleClick = async (item: ClassItem) => {
@@ -181,12 +187,20 @@ const CoachClasses = () => {
           No has creado ninguna clase.
         </p>
       ) : (
-        <List
-          data={classes}
-          actionClassID={actionClassID}
-          onDelete={handleDelete}
-          onClick={handleClick}
-        />
+        <>
+          <FilterInput
+            value={filterText}
+            onChange={setFilterText}
+            placeholder="Buscar clase..."
+          />
+          <List
+            key={filterText}
+            data={filteredClasses}
+            actionClassID={actionClassID}
+            onDelete={handleDelete}
+            onClick={handleClick}
+          />{" "}
+        </>
       )}
 
       {modalVisible && (

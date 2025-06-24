@@ -9,6 +9,7 @@ import ViewClassModal from "../components/modals/ViewClassModal";
 import { toast } from "react-toastify";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import Loader from "../components/Loader";
+import FilterInput from "../components/FilterInput";
 
 const MyClasses = () => {
   useDocumentTitle("Mis Clases");
@@ -109,16 +110,11 @@ const MyClasses = () => {
         </p>
       ) : (
         <>
-          {/* INPUT PARA FILTRAR */}
-          <div className="mb-3 text-center">
-            <input
-              type="text"
-              className="form-control w-50 mx-auto"
-              placeholder="Buscar clase..."
-              value={filterText}
-              onChange={(e) => setFilterText(e.target.value)}
-            />
-          </div>
+          <FilterInput
+            value={filterText}
+            onChange={setFilterText}
+            placeholder="Buscar clase..."
+          />
 
           <List
             key={filterText}

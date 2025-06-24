@@ -9,6 +9,7 @@ import type { ClassItem } from "../models/ClassItem";
 import { toast } from "react-toastify";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import Loader from "../components/Loader";
+import FilterInput from "../components/FilterInput";
 
 const Classes = () => {
   useDocumentTitle("Clases");
@@ -122,15 +123,11 @@ const Classes = () => {
         <Loader />
       ) : (
         <>
-          <div className="mb-3 text-center">
-            <input
-              type="text"
-              className="form-control w-50 mx-auto"
-              placeholder="Buscar clase..."
-              value={filterText}
-              onChange={(e) => setFilterText(e.target.value)}
-            />
-          </div>
+          <FilterInput
+            value={filterText}
+            onChange={setFilterText}
+            placeholder="Buscar clase..."
+          />
           <List
             data={filteredClasses}
             onAdd={handleSelect}
