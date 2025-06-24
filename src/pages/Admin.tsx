@@ -100,6 +100,33 @@ export const Admin = () => {
     fetchRoles();
   }, [token]);
 
+  const handleCoach = async (userId: number) => {
+    try {
+      const roleId = 2; //rolesList.find((role) => role.name === "ROLE_COACH")?.id;
+
+      const response = await fetch(`${SERVER_URL}/admin/users/addrole`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userID: userId,
+          roleID: roleId,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success("El usuario ahora es profesor.");
+      } else {
+        toast.error("Error al agregar rol.");
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
+      toast.error("Error al agregar rol.");
+    }
+  };
+
   const handleDelete = async (userId: number) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro que deseas eliminar este usuario?"
@@ -257,6 +284,11 @@ export const Admin = () => {
                     className="btn btn-sm btn-danger me-2"
                     onClick={() => handleDelete(user.id)}>
                     Eliminar
+                  </button>
+                  <button
+                    className="btn btn-sm btn-primary me-2"
+                    onClick={() => handleCoach(user.id)}>
+                    Profesor
                   </button>
                   <button
                     className="btn btn-sm btn-success"
